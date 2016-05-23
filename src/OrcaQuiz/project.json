@@ -1,7 +1,6 @@
 ﻿{
   "dependencies": {
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0-rc2-final",
-
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0-rc2-final",
@@ -12,10 +11,13 @@
       "type": "build"
     },
     "Microsoft.Framework.ConfigurationModel.Json": "1.0.0-beta4",
-
     "bootstrap": "3.3.6",
     "jQuery": "2.2.3",
-    "iTextSharp": "5.5.9"
+    "iTextSharp": "5.5.9",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0-rc2-final"
   },
 
   "tools": {

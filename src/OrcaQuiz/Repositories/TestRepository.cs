@@ -12,7 +12,7 @@ using OrcaQuiz.ViewModels;
 
 namespace OrcaQuiz.Repositories
 {
-    public class TestPlatformRepository : ITestPlatformRepository
+    public class TestRepository : IOrcaQuizRepository
     {
         public List<Module> _modules { get; set; }
         public List<Test> _tests { get; set; }
@@ -47,7 +47,7 @@ namespace OrcaQuiz.Repositories
             return (_tests.SelectMany(o => o.Questions).SelectMany(q => q.Answers)).ToArray();
         }
 
-        public TestPlatformRepository()
+        public TestRepository()
         {
             _modules = new List<Module>();
             _tests = new List<Test>();
@@ -111,7 +111,7 @@ namespace OrcaQuiz.Repositories
             {
                 Id = 1,
                 //Tags = new List<string>() { "Eazy", "awesome", "heavy" },
-                Author = "Linus Joensson",
+                AuthorId = "Linus Joensson",
                 Name = "Basic C#",
                 Description = "An eazy test",
                 CertificateAuthor = "Patrik J",
@@ -182,7 +182,7 @@ namespace OrcaQuiz.Repositories
             {
                 Id = 2,
                 //Tags = new List<string>() { "Eazy", "awesome", "heavy" },
-                Author = "Linus Joensson",
+                AuthorId = "Linus Joensson",
                 Name = "My Second Test",
                 Description = "An eazy test",
                 #region Questions
@@ -521,7 +521,7 @@ namespace OrcaQuiz.Repositories
                 //Static
                 IsPublished = true,
                 //Tags = new List<string>() { "happy", "insane" },
-                Author = _users.ElementAt(0).FirstName,
+                AuthorId = _users.ElementAt(0).FirstName,
             });
 
             return _tests.Last().Id;

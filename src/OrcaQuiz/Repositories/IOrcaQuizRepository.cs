@@ -9,7 +9,7 @@ using OrcaQuiz.ViewModels;
 
 namespace OrcaQuiz.Repositories
 {
-    public interface ITestPlatformRepository
+    public interface IOrcaQuizRepository
     {
         #region Module
         List<Module> GetAllModules();

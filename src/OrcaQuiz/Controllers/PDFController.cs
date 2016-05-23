@@ -12,8 +12,8 @@ namespace OrcaQuiz.Controllers
     public class PdfController : Controller
     {
         IHostingEnvironment env;
-        ITestPlatformRepository repository;
-        public PdfController(IHostingEnvironment env, ITestPlatformRepository repository)
+        IOrcaQuizRepository repository;
+        public PdfController(IHostingEnvironment env, IOrcaQuizRepository repository)
         {
             this.repository = repository;
             this.env = env;

@@ -16,10 +16,10 @@ namespace OrcaQuiz.Controllers
 {
     public class AdminController : Controller
     {
-        ITestPlatformRepository repository;
+        IOrcaQuizRepository repository;
         IHostingEnvironment env;
 
-        public AdminController(ITestPlatformRepository repository, IHostingEnvironment env)
+        public AdminController(IOrcaQuizRepository repository, IHostingEnvironment env)
         {
             this.env = env;
             this.repository = repository;

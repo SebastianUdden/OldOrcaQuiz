@@ -9,9 +9,9 @@ namespace OrcaQuiz.Controllers
 {
     public class ModuleController : Controller
     {
-        ITestPlatformRepository repository;
+        IOrcaQuizRepository repository;
 
-        public ModuleController(ITestPlatformRepository repository)
+        public ModuleController(IOrcaQuizRepository repository)
         {
             this.repository = repository;
         }

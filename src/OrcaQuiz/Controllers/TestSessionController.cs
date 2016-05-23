@@ -14,9 +14,9 @@ namespace OrcaQuiz.Controllers
 
     public class TestSessionController : Controller
     {
-        ITestPlatformRepository repository;
+        IOrcaQuizRepository repository;
 
-        public TestSessionController(ITestPlatformRepository repository)
+        public TestSessionController(IOrcaQuizRepository repository)
         {
             this.repository = repository;
         }

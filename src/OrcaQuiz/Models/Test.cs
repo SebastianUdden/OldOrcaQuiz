@@ -12,7 +12,7 @@ namespace OrcaQuiz.Models
         public int? ModuleId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Author { get; set; } //Sekundärnyckel till användaren
+        public string AuthorId { get; set; } //Sekundärnyckel till användaren
         public string Tags { get; set; }
         public bool IsPublished { get; set; }
         public virtual List<Question> Questions { get; set; }
