@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OrcaQuiz.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace OrcaQuiz
 {
@@ -37,9 +38,15 @@ namespace OrcaQuiz
                 AddDbContext<OrcaQuizContext>(options =>
                 options.UseSqlServer(conString));
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
+            services.
+                AddDbContext<IdentityDbContext>(options =>
+                options.UseSqlServer(conString));
+
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddSingleton<IOrcaQuizRepository, DbRepository>();
             services.AddMvc();
         }
@@ -50,6 +57,7 @@ namespace OrcaQuiz
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
+            app.UseIdentity();
             app.UseMvcWithDefaultRoute();
         }
     }
