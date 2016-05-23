@@ -10,6 +10,6 @@
     <br />
     <p class="pBold onTheLine">Time Limit: </p><p class="onTheLine"> @Model.TimeLimit</p>
     <br />
-
-    <a asp-action="StartSession" asp-controller="TestSession" asp-route-testId="@Model.TestId"><button class="orcaBtn btnWidth120 TopMargin20">Start test</button></a>
+   
+    <button class="orcaBtn btnWidth120 TopMargin20" onclick="document.location.href = '@($"/TestSession/StartSession/{Model.TestId}")'">Start test</button>
 </div>
