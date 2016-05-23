@@ -15,16 +15,9 @@ namespace OrcaQuiz.Utils
 
         public static byte[] GenerateCerfificate(IHostingEnvironment env, string templateName, PdfSymbols pdfSymbols)
         {
-            var root = new Uri(env.WebRootPath);
-            var rootParent = root.AbsoluteUri.Remove(root.AbsoluteUri.Length - root.Segments.Last().Length);
-            var templatePath = rootParent + $@"PDF/Templates/{templateName}";
-            //var outputPath = rootParent + $@"wwwRoot/PDF/OutPut/{outputName}";
-
-            var fileLength = "file:///".Length;
-            //outputPath = outputPath.Substring(fileLength, outputPath.Count() - fileLength);
-
-            return PdfUtils.GeneratePDF(templatePath.Substring(fileLength, templatePath.Count() - fileLength)
-                , pdfSymbols);
+            var pathWithoutWwwRoot = env.WebRootPath.Substring(0, env.WebRootPath.Length - ("\\wwwroot").Length);
+            var templatePath = pathWithoutWwwRoot + $@"\PDF\Templates\{templateName}";
+            return PdfUtils.GeneratePDF(templatePath, pdfSymbols);
         }
 
         private static byte[] GeneratePDF(string pathToPDFTemplate, PdfSymbols pdf)
