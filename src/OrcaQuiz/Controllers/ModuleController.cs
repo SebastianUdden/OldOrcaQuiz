@@ -1,11 +1,11 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using TestPlatform.Utils;
-using TestPlatform.ViewModels;
-using TestPlatform.Repositories;
-using TestPlatform.Models;
+using OrcaQuiz.Utils;
+using OrcaQuiz.ViewModels;
+using OrcaQuiz.Repositories;
+using OrcaQuiz.Models;
 
-namespace TestPlatform.Controllers
+namespace OrcaQuiz.Controllers
 {
     public class ModuleController : Controller
     {

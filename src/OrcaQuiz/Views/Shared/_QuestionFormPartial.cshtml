@@ -26,7 +26,7 @@
                         <div class="form-group">
                             @switch (Model.QuestionType)
                             {
-                                case TestPlatform.Models.Enums.QuestionType.SingleChoice:
+                                case OrcaQuiz.Models.Enums.QuestionType.SingleChoice:
                                     {
                                         <p class="onTheLine" for="@($"answer{answer.AnswerId}")">
                                             <input type="radio"
@@ -39,7 +39,7 @@
                                         </p>
                                     }
                                     break;
-                                case TestPlatform.Models.Enums.QuestionType.MultipleChoice:
+                                case OrcaQuiz.Models.Enums.QuestionType.MultipleChoice:
                                     {
                                         <p class="onTheLine" for="@($"answer{answer.AnswerId}")">
                                             @if (answer.IsChecked)
@@ -68,7 +68,7 @@
                     }
 
                 }
-                else if (Model.QuestionType == TestPlatform.Models.Enums.QuestionType.TextMultiLine)
+                else if (Model.QuestionType == OrcaQuiz.Models.Enums.QuestionType.TextMultiLine)
                 {
                     @if (!Model.IsInTestSession)
                     {
@@ -87,7 +87,7 @@
                         </div>
                     }
                 }
-                else if (Model.QuestionType == TestPlatform.Models.Enums.QuestionType.TextSingleLine)
+                else if (Model.QuestionType == OrcaQuiz.Models.Enums.QuestionType.TextSingleLine)
                 {
                     @if (!Model.IsInTestSession)
                     {

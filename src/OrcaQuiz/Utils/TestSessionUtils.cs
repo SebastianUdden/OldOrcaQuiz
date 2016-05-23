@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestPlatform.Models;
+using OrcaQuiz.Models;
 
-namespace TestPlatform.Utils
+namespace OrcaQuiz.Utils
 {
     public class TestSessionUtils
     {

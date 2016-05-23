@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestPlatform.ViewModels
+namespace OrcaQuiz.ViewModels
 {
     public class ShowResultsVM
     {

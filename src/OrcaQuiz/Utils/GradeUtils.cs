@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestPlatform.Models;
-using TestPlatform.Repositories;
+using OrcaQuiz.Models;
+using OrcaQuiz.Repositories;
 
-namespace TestPlatform.Utils
+namespace OrcaQuiz.Utils
 {
     public static class GradeUtils
     {

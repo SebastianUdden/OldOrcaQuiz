@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using TestPlatform.Models;
+using OrcaQuiz.Models;
 
-namespace TestPlatform.ViewModels
+namespace OrcaQuiz.ViewModels
 {
     public class ModuleVM
     {

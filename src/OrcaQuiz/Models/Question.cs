@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestPlatform.Models.Enums;
+using OrcaQuiz.Models.Enums;
 
-namespace TestPlatform.Models
+namespace OrcaQuiz.Models
 {
     public class Question
     {

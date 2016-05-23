@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TestPlatform.Utils;
+using OrcaQuiz.Utils;
 using Microsoft.AspNetCore.Hosting;
-using TestPlatform.Repositories;
+using OrcaQuiz.Repositories;
 
-namespace TestPlatform.Controllers
+namespace OrcaQuiz.Controllers
 {
     public class PdfController : Controller
     {

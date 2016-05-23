@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestPlatform.Utils
+namespace OrcaQuiz.Utils
 {
     public static class AppConstants
     {

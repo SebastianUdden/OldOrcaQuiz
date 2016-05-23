@@ -82,7 +82,7 @@
     @*Model.HasCertificate && Model.IsSuccessful == true*@
 
     <div>
-        @if (Model.SessionCompletedReason == TestPlatform.Models.Enums.SessionCompletedReason.TimedOut)
+        @if (Model.SessionCompletedReason == OrcaQuiz.Models.Enums.SessionCompletedReason.TimedOut)
         {
             <h5 class="red">
                 Your test timed out

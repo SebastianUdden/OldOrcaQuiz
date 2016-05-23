@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using TestPlatform.Models;
-using TestPlatform.Models.Enums;
-using TestPlatform.Repositories;
-using TestPlatform.Utils;
-using TestPlatform.ViewModels;
+using OrcaQuiz.Models;
+using OrcaQuiz.Models.Enums;
+using OrcaQuiz.Repositories;
+using OrcaQuiz.Utils;
+using OrcaQuiz.ViewModels;
 
-namespace TestPlatform.Controllers
+namespace OrcaQuiz.Controllers
 {
     public class AdminController : Controller
     {

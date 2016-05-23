@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestPlatform.Utils
+namespace OrcaQuiz.Utils
 {
     public class PdfUtils
     {
