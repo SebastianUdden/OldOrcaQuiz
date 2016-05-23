@@ -1,0 +1,183 @@
+﻿/*---------------------------------------------------------------------------
+                              ORCA BLUE 
+---------------------------------------------------------------------------*/
+.orcaBlue {
+    color: #337AB7;
+}
+
+    .orcaBlue:hover {
+        color: #2b679b;
+    }
+
+.bgOrcaBlue {
+    background-color: #337AB7;
+}
+
+    .bgOrcaBlue:hover {
+        background-color: #2b679b;
+    }
+
+/*---------------------------------------------------------------------------
+                               AQUA BLUE 
+---------------------------------------------------------------------------*/
+.aquaBlue {
+    color: #4BCAB4;
+}
+
+.bgAquaBlue {
+    background-color: #4BCAB4;
+}
+
+    .bgAquaBlue:hover {
+        background-color: #47bca8;
+    }
+
+/*---------------------------------------------------------------------------
+                              LIGHT BLUE 
+---------------------------------------------------------------------------*/
+.lightBlue {
+    color: #597ba9;
+}
+
+    .lightBlue:hover {
+        color: #dbeafe;
+    }
+
+.bgLightBlue {
+    background-color: #b5d1f7;
+}
+
+    .bgLightBlue:hover {
+        background-color: #dbeafe;
+    }
+
+/*---------------------------------------------------------------------------
+                                 RED 
+---------------------------------------------------------------------------*/
+.red {
+    color: #D03427;
+}
+
+    .red:hover {
+        color: #BF332C;
+    }
+
+.bgRed {
+    background-color: #D03427;
+    color: white;
+    border: none;
+    /*border-radius: 3px;*/
+    font-family: Lato !important;
+    font-size: 16px !important;
+    letter-spacing: 1px !important;
+    font-weight: 400 !important;
+    text-decoration: none;
+    padding: 8px;
+}
+
+    .bgRed:hover {
+        background-color: #BF332C;
+    }
+
+/*---------------------------------------------------------------------------
+                                 GREEN 
+---------------------------------------------------------------------------*/
+.green {
+    color: #45b449;
+}
+
+    /*.green:hover {
+        color: #228b26;
+    }*/
+
+.bgGreen {
+    background-color: #45b449;
+}
+
+    .bgGreen:hover {
+        background-color: #228b26;
+    }
+
+
+
+/*---------------------------------------------------------------------------
+                                 YELLOW 
+---------------------------------------------------------------------------*/
+.yellow {
+    color: #b38e2f;
+}
+
+    .yellow:hover {
+        color: #deb13d;
+    }
+
+.bgYellow {
+    background-color: #b38e2f;
+}
+
+    .bgYellow:hover {
+        background-color: #deb13d;
+    }
+
+
+/*---------------------------------------------------------------------------
+                                 WHITE 
+---------------------------------------------------------------------------*/
+.white {
+    color: #fff;
+}
+
+.bgWhite {
+    background-color: #fff;
+}
+
+
+/*---------------------------------------------------------------------------
+                              LIGHT GREY 
+---------------------------------------------------------------------------*/
+.lightGrey {
+    color: #f4f4f4;
+}
+
+    .lightGrey:hover {
+        color: #D3D3D3;
+    }
+
+.bgLightGrey {
+    background-color: #f4f4f4;
+}
+
+    .bgLightGrey:hover {
+        background-color: #D3D3D3;
+    }
+
+/*---------------------------------------------------------------------------
+                               DARK GREY 
+---------------------------------------------------------------------------*/
+.darkGrey {
+    color: #D3D3D3;
+}
+
+    .darkGrey:hover {
+        color: #b2b2b2;
+    }
+
+
+.bgDarkGrey {
+    background-color: #D3D3D3;
+}
+
+    .bgDarkGrey:hover {
+        background-color: #b2b2b2;
+    }
+
+    /*---------------------------------------------------------------------------
+                               BLACK
+---------------------------------------------------------------------------*/
+.black {
+    color: #000;
+}
+
+.bgBlack {
+    background-color: #000;
+}

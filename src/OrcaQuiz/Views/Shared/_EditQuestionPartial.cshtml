@@ -1,0 +1,6 @@
+﻿@model QuestionFormVM
+
+<div>
+    <textarea asp-for="QuestionText" placeholder="" class="tinyMCE" id="mceQuestionBox">@Model.QuestionText</textarea>
+    <span asp-validation-for="QuestionText" class="text-danger"></span>
+</div>

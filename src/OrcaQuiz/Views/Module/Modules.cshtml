@@ -1,0 +1,28 @@
+﻿@model ModuleVM[]
+
+<h1>Modules</h1>
+<a asp-controller="Admin" asp-action="CreateModule">
+    <button class="orcaBtn topBottomMargin20 bgGreen">
+        <span class="fa fa-plus rightMargin5"></span>Create Module
+    </button>
+</a>
+<div style="display:inline">
+    @foreach (var module in Model)
+    {
+        <div class="whiteSquare TopMargin20">
+            <p class="pBold onTheLine">@module.Name</p>
+            <p class="pBold onTheLine rightMargin10">: </p>
+            <p class="onTheLine">@module.Description</p>
+            <i class="onTheLine">@module.Tags</i>
+            <a href="~/Admin/Module/@module.Id">Länk</a>
+            <a asp-controller="Module" asp-action="ManageModuleTests" asp-route-moduleId="@module.Id"><button class="orcaBtn topMargin-8 rightMargin10 btnWidth40 orcaTool-tooltip" style="float: right;" data-toggle="tooltip" title="Tests"><span class="fa fa-pencil"></span></button></a>
+            <a asp-controller="Module" asp-action="EditModule" asp-route-id="@module.Id"><button class="orcaBtn topMargin-8 btnWidth40 orcaTool-tooltip" style="float: right;" data-toggle="tooltip" title="Settings"><span class="fa fa-cog"></span></button></a>
+            <ul>
+                @foreach (var test in module.Tests)
+                {
+                    <li>@test.Name</li>
+                }
+            </ul>
+        </div>
+    }
+</div>

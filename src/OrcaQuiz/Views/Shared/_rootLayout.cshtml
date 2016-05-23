@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    <link href="~/css/fonts.css" rel="stylesheet" />
+    <link href="~/css/color.css" rel="stylesheet" />
+    <link href="~/css/images.css" rel="stylesheet" />
+    <link href="~/css/heading.css" rel="stylesheet" />
+    <link href="~/css/margins.css" rel="stylesheet" />
+    <link href="~/css/buttonsandboxes.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="https://code.angularjs.org/1.5.5/angular.min.js"></script>
+    <script src="~/scripts/dist/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="~/scripts/dist/jstree.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    @*<script src="~/lib/bootstrap-autohidingnavbar/dist/jquery.bootstrap-autohidingnavbar.js"></script>*@
+
+    <script>
+        var app = angular.module('myApp', []);
+        //$(document).ready(function () {
+        //    $("div.navbar-fixed-top").autoHidingNavbar({
+        //    });
+        //});
+
+        // #region Tooltip
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+        // #endregion
+    </script>
+    @RenderSection("headScripts", false)
+</head>
+
+<body ng-app="myApp">
+
+    <!-- #region Header -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-menu">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="~/Home/Index">
+                    <img class="HeaddingLogo" src="~/Images/Logo/OrcaTestLogoTransp.png" />
+                    <p class="LogoText ThinLogo">Orca</p><p class="LogoText BoldLogo">Quiz</p>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="main-menu">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="~/Admin/Modules">Modules</a></li>
+                    <li><a href="~/Admin/Dashboard">Dashboard</a></li>
+                    <li><a href="~/TestSession/Index/1">Testsession</a></li>
+                    @*<li><a href="~/User/SelectTest">Take a test</a></li>
+                        <li><a href="~/Admin/index">Manage tests</a></li>*@
+                    <li><a href="~/Home/Login">Log in</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- #endregion -->
+    <div class="topBottomMargin80">
+        @RenderBody()
+    </div>
+    @RenderSection("scripts", false)
+</body>
+</html>

@@ -1,0 +1,91 @@
+﻿/*---------------------------------------------------------------------------
+                              THE NAV BAR
+---------------------------------------------------------------------------*/
+
+/* Add a PINK background color with a little bit see-through */
+.navbar {
+    background-color: #337AB7; /*BLUE*/
+    border: 0;
+    font-size: 16px !important;
+    font-family: Lato;
+    font-weight: 400;
+    letter-spacing: 1px;
+    border-radius: 0;
+    opacity: 0.9;
+}
+
+    /* Add a WHITE color to all navbar links */
+    .navbar li a, .navbar .navbar-brand {
+        color: #fff !important;
+    }
+
+/* When hoovering over a menu, WHITE box and BLUE text */
+.navbar-nav li a:hover, .navbar-nav li.active a {
+    color: #337AB7 /*BLUE*/ !important;
+    background-color: #fff !important;
+}
+
+/* Remove border color from the collapsible button */
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+    color: #fff !important;
+}
+
+/*---------------------------------------------------------------------------
+                              HAMBURGER MENU
+---------------------------------------------------------------------------*/
+
+/*Hamburger-meny before and after click - color on the button*/
+.navbar-toggle {
+    background-color: transparent !important;
+}
+
+    /*Hamburger-meny before and after click - color on the stripes/bars*/
+    .navbar-toggle .icon-bar {
+        background-color: #fff !important;
+    }
+
+    /*Hamburger-meny hoover - color on the button*/
+    .navbar-toggle:hover {
+        background-color: #fff !important;
+    }
+
+        /*Hamburger-meny hoover - color on the stripes/bars*/
+        .navbar-toggle:hover .icon-bar {
+            background-color: #337AB7 !important;
+        }
+
+
+/*---------------------------------------------------------------------------
+                                  LOGO
+---------------------------------------------------------------------------*/
+.HeaddingLogo {
+    height: 40px;
+    margin: -11px 10px 0 20px;
+    display: inline !important;
+}
+
+.LogoText {
+    color: white; 
+    font-family: Lato; 
+    font-size: 28px; 
+    display: inline !important;
+}
+
+.ThinLogo {
+    font-weight: 100;
+}
+
+.BoldLogo {
+    font-weight: 900;
+}
+
+/*---------------------------------------------------------------------------
+                              DROP SHADOW UNDER NAVBAR 
+---------------------------------------------------------------------------*/
+
+.navbar-fixed-top {
+    -webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.25);
+    -moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.25);
+    box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.25);
+}

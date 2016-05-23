@@ -1,0 +1,236 @@
+﻿@model EditQuestionVM
+
+@*/// ----------------------- SETTINGS ---------------------------////*@
+<div id="questionSettingsDiv">
+    <br />
+    <div class="BottomMargin20">
+
+        <h2 class="grayText topMargin-8">Question Settings</h2>
+
+        <form asp-controller="Admin" asp-action="UpdateQuestionSettings" asp-route-testId="@Model.TestId" asp-route-questionId="@Model.QuestionId">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label asp-for="Type"></label>
+                    <select asp-for="Type" class="form-control" id="dropQuestionType" asp-items="Model.ItemType" onchange="TypeChanged()"></select>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+            </div>
+
+            <label asp-for="SortOrder"></label><br />
+
+            <input asp-for="SortOrder" placeholder="Sort order" />
+            <span asp-validation-for="SortOrder" class="text-danger"></span>
+            <br />
+            <!-- styrt upp samma design med checkbox. att ha den innan, kan bytas -->
+            <div class="row LeftMargin5 TopMargin20">
+                <div class="leftFloat rightMargin10"><input asp-for="HasComment" placeholder="Question" /></div>
+                <div class="leftFloat"><label asp-for="HasComment"></label></div>
+                <span asp-validation-for="HasComment" class="text-danger"></span>
+            </div>
+
+            @*<input asp-for="HasComment" placeholder="Question" />
+                <span asp-validation-for="HasComment" class="text-danger"></span>
+                <br />*@
+
+            <div id="editQuestionTextDiv" hidden="hidden">
+                @Html.Partial("_EditQuestionPartial", Model.QuestionFormVM)
+
+                @*<button onclick="UpdateQuestionText(@Model.QuestionId)" hidden="hidden"
+                            id="@("btnSaveQuestionTxt" + Model.QuestionId)" class="orcaBtn btnWidth120 TopMargin20">
+                        <span class="fa fa-save rightMargin5"></span>
+                        Save
+                    </button>*@
+            </div>
+
+            <div id="previewQuestionTextDiv" onclick="ShowEditQuestionText(@Model.QuestionId)" data-toggle="tooltip" title="Edit" class="orcaTool-tooltip">
+                @Html.Partial("_QuestionFormPartial", Model.QuestionFormVM)
+            </div>
+
+            @*<div onclick="HidePreviewQUestionTextDiv(@Model.QuestionId)">
+                </div>*@
+            <input type="submit" value="Save" class="fa fa-save rightMargin5 orcaBtn TopMargin20 onTheLine btnWidth120" />
+        </form>
+
+
+        @*<button onclick="ShowEditQuestionText(@Model.QuestionId)"
+                    id="@("btnEditQuestionTxt" + Model.QuestionId)" class="orcaBtn btnWidth120">
+                <span class="fa fa-pencil rightMargin5"></span>
+                Edit
+            </button>*@
+    </div>
+</div>
+<br />
+
+@*/// ----------------------- ANSWERS ----------------------------////*@
+
+@if (Model.AnswerDetailVMs != null)
+{
+    <div>
+        <h2 class="TopMargin20">Answer Settings</h2>
+        @foreach (var answer in Model.AnswerDetailVMs)
+        {
+            <div id="@("answerDiv"+answer.AnswerId)">
+                <div class="panel">
+                    @*panel-primary*@
+                    <div class="panel-body">
+                        @*När man bara ser svaret*@
+                        <div id=@("previewAnswerDiv"+ answer.AnswerId) class="leftFloat">
+                            @Html.Partial("_AnswerFormPartial", answer)
+
+                        </div>
+                        <button onclick="RemoveAnswer(@Model.TestId, @Model.QuestionId, @answer.AnswerId)"
+                                id="@("btnRemoveAnswer" + answer.AnswerId)" class="orcaBtn bgRed btnWidth40 rightFloat topMargin-8 orcaTool-tooltip redT"
+                                data-toggle="tooltip" title="Delete">
+                            <span class="fa fa-trash fa-align-center"></span>
+                        </button>
+
+                        <button id="@("btnShowEditAnswer" + answer.AnswerId)" onclick="toggleAnswerDiv(@answer.AnswerId)" class="orcaBtn btnWidth40 rightFloat topMargin-8 orcaTool-tooltip rightMargin5"
+                                data-toggle="tooltip" title="Edit">
+                            <span class="fa fa-pencil fa-align-center"></span>
+                        </button>
+
+                        @*När man editerar sidan*@
+                        <div id=@("editAnswerDiv"+ answer.AnswerId) hidden="hidden" style="margin-top:40px;">
+                            @Html.Partial("_EditAnswerPartial", answer)
+                            <input type="checkbox" id="@("answerIsCorrect"+answer.AnswerId)" value="Hej"
+                                   @(answer.IsChecked ? "checked=\"checked\"" : "") /> This Answer Is Correct
+                            <br />
+                            Sort Order:
+                            <input type="text" id="@("sortOrder"+answer.AnswerId)" value="@answer.SortOrder" name="sortOrder" />
+                            <br />
+                            <button onclick="UpdateAnswer(@answer.AnswerId, @Model.QuestionId)"
+                                    id="@("btnUpdateAnswer" + answer.AnswerId)" class="orcaBtn btnWidth120 TopMargin20">
+                                <span class="fa fa-save rightMargin5">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <form asp-controller="Admin" asp-action="CreateEmptyAnswer" asp-route-testId="@Model.TestId" asp-route-questionId="@Model.QuestionId">
+            <input type="submit" class="orcaBtn rightMargin10 btnWidth120 BottomMargin20 bgGreen fa fa-plus" value="Answer" />
+        </form>
+    </div>
+}
+
+    @*/// ------------------------------------------------------------////*@
+
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+    <script>
+        function RemoveAnswer(testId, questionId, answerId) {
+            var actionUrl = "/Admin/RemoveAnswer";
+
+            $.post(actionUrl, { testId: testId, questionId: questionId, answerId: answerId })
+            .done(function () {
+                $("#answerDiv" + answerId).html("");
+            });
+        }
+
+        //function ShowEditAnswer(answerId) {
+
+        //    tinymce.execCommand('mceAddEditor', false, 'mceAnswerBox' + answerId);
+
+        //    $("#editAnswerDiv" + answerId).toggle();
+        //    $("#btnRemoveAnswer" + answerId).toggle();
+        //    $("#previewAnswerDiv" + answerId).toggle();
+        //    $("#btnUpdateAnswer" + answerId).toggle();
+        //    $("#btnShowEditAnswer" + answerId).toggle();
+        //}
+
+        function toggleAnswerDiv(answerId) {
+            $("#editAnswerDiv" + answerId).toggle();
+            tinymce.execCommand('mceAddEditor', false, 'mceAnswerBox' + answerId);
+        }
+
+        function UpdateAnswer(answerId, questionId) {
+            tinymce.execCommand('mceAddEditor', false, 'mceAnswerBox' + answerId);
+
+            var answerText = tinymce.get('mceAnswerBox' + answerId).getContent();
+            var actionUrl = "/Admin/UpdateAnswer";
+            var isCorrect = (document.getElementById('answerIsCorrect' + answerId).checked);
+            var sortOrder = $("#sortOrder" + answerId).val();
+
+            $.post(actionUrl, { questionId: questionId, answerId: answerId, answerText: answerText, sortOrder: sortOrder, isCorrect: isCorrect })
+                    .done(function (response) {
+                        $("#previewAnswerDiv" + answerId).html(response);
+                    });
+
+            $("#editAnswerDiv" + answerId).toggle();
+
+            //$("#btnUpdateAnswer" + answerId).toggle();
+            //$("#btnShowEditAnswer" + answerId).toggle();
+            //$("#editAnswerDiv" + answerId).toggle();
+            //$("#btnRemoveAnswer" + answerId).toggle();
+            //$("#previewAnswerDiv" + answerId).toggle();
+        }
+
+        //function UpdateQuestionText(id) {
+
+        //    var text = tinymce.get('mceQuestionBox').getContent();
+        //    var actionUrl = "/Admin/UpdateQuestionText";
+
+        //    $.post(actionUrl, { questionId: id, questionText: text })
+        //    .done(function (response) {
+        //        $("#previewQuestionTextDiv").html(response);
+        //    });
+
+        //    $("#previewQuestionTextDiv").toggle()
+        //    $("#btnEditQuestionTxt" + id).toggle()
+        //    $("#btnSaveQuestionTxt" + id).toggle()
+        //    $("#editQuestionTextDiv").toggle()
+        //}
+
+        function HidePreviewQUestionTextDiv(id) {
+            $("#editQuestionTextDiv").hide()
+            $("#btnSaveQuestionTxt" + id).show()
+            $("#btnEditQuestionTxt" + id).show()
+            $("#previewQuestionTextDiv").show()
+        }
+
+        function ShowEditQuestionText(id) {
+
+            $.post("/Admin/EditQuestionText", { questionId: id });
+
+            $("#editQuestionTextDiv").toggle()
+            $("#btnSaveQuestionTxt" + id).toggle()
+            $("#btnEditQuestionTxt" + id).toggle()
+            $("#previewQuestionTextDiv").toggle()
+        }
+
+        //----------------------------------------------------------------//
+        // ************************ TINY MCE **************************** //
+        //----------------------------------------------------------------//
+
+
+        //--------------------------QUESTION-------------------------------//
+        tinymce.init({
+            selector: 'textarea#mceQuestionBox',
+            height: 1,
+            max_width: 1000,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code',
+                'textcolor colorpicker'
+            ],
+            toolbar: 'forecolor backcolor | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | media',
+            content_css: [
+                '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css'
+            ],
+            menubar: false,
+            forced_root_block: ""
+        });
+
+        @if (string.IsNullOrWhiteSpace(Model.QuestionText))
+        {
+            <text>
+        ShowEditQuestionText(@Model.QuestionId);
+            </text>
+        }
+    </script>
+    <style>
+        .panel {
+            background-color: #fff; /*#EEEEEE*/
+        }
+    </style>

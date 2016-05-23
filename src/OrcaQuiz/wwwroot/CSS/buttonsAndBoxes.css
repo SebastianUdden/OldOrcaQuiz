@@ -1,0 +1,161 @@
+﻿/*---------------------------------------------------------------------------
+                              BUTTON
+---------------------------------------------------------------------------*/
+
+/* General button adjustments */
+.orcaBtn {
+    background-color: #337AB7; /* Blue */
+    color: white;
+    border: none;
+    /*border-radius: 3px;*/
+    font-family: Lato !important;
+    font-size: 16px !important;
+    letter-spacing: 1px !important;
+    font-weight: 400 !important;
+    text-decoration: none;
+    padding: 8px;
+}
+
+    /* Button hover effects */
+    .orcaBtn:hover {
+        background-color: #2b679b; /* Blue */
+    }
+
+    /* General button adjustments */
+.orcaWhiteBigBtn {
+    background-color: #fff; /* Blue */
+    color: #337AB7;
+    border: none;
+    /*border-radius: 3px;*/
+    font-family: Lato !important;
+    font-size: 20px !important;
+    letter-spacing: 1px !important;
+    font-weight: 700 !important;
+    text-decoration: none;
+    padding: 8px;
+    align-items: center;
+}
+
+    /* Button hover effects */
+    .orcaWhiteBigBtn:hover {
+        color: #2b679b; /* Blue */
+        background-color: #dbeafe;
+    }
+
+.orcaBtn:active {
+    background-color: #193d5c;
+    color:#47bca8
+}
+
+.btnWidth40 {
+    width: 40px;
+}
+
+/* Button sizes */
+.btnSmall {
+    padding: 0 !important;
+}
+
+.btnMedium {
+    padding: 12px 8px !important;
+}
+
+.btnLarge {
+    padding: 16px 12px !important;
+}
+
+.btnWidth210 {
+    width: 210px;
+}
+
+.btnWidth120 {
+    width: 120px;
+}
+
+.btnWidth175 {
+    width: 175px;
+}
+
+.btnSpan {
+    font-size: 16px !important;
+    margin: 0 5px;
+}
+
+/*---------------------------------------------------------------------------
+                              TOOLTIPS
+---------------------------------------------------------------------------*/
+.orcaTool-tooltip + .tooltip > .tooltip-inner {
+    background-color: #fff;
+    padding: 8px;
+    font-family: Lato;
+    font-size: 16px;
+    font-weight: 700;
+    color: #2b679b;
+    -webkit-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.25);
+    -moz-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.25);
+    box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.25);
+}
+
+.orcaTool-tooltip + .tooltip > .tooltip-arrow {
+    border-top-color: #fff;
+    text-shadow: 5px 5px 10px 1px rgba(0,0,0,0.25);
+}
+
+.redT + .tooltip > .tooltip-inner {
+    color: #D03427 !important;
+}
+
+/*---------------------------------------------------------------------------
+                              BOXES
+---------------------------------------------------------------------------*/
+
+.transparentWhiteSquare {
+    background-color: rgba(255,255,255,0.75);
+    border-radius: 3px;
+    margin-top: 20px;
+    /*margin: 20px 20px 20px 20px !important;*/
+    padding: 1px 40px 30px 40px;
+}
+
+.whiteSquare {
+    background-color: white;
+    padding: 20px;
+}
+.offwhiteSquare {
+    background-color: #F4F4F4;
+    padding: 20px;
+}
+
+.rightFloat {
+    float: right;
+}
+
+.leftFloat {
+    float: left;
+}
+
+.topFloat {
+    
+}
+
+input[type="checkbox"]{
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  /*-webkit-appearance: none;*/
+  appearance: none;
+}
+.maxWidth600 {
+    max-width:600px;
+}
+.maxWidth560 {
+    max-width:560px;
+}
+
+/*---------------------------------------------------------------------------
+                              TEXT AREA
+---------------------------------------------------------------------------*/
+
+textarea.tinyMCE {
+    width: 100% !important;
+}

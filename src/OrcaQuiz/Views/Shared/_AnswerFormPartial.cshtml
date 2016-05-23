@@ -1,0 +1,26 @@
+﻿@model AnswerDetailVM
+
+@switch (Model.QuestionType)
+            {
+                case TestPlatform.Models.Enums.QuestionType.SingleChoice:
+                    {
+            <p class="onTheLine" for="@($"answer{Model.AnswerId}")">
+                <input type="radio" @(Model.IsChecked ? "checked=\"checked\"" : "") disabled="disabled" />
+                @(Html.Raw(Model.AnswerText))
+            </p>
+            @if (Model.IsChecked)
+                        {<p class="onTheLine pBold green">(Correct Answer)</p> }
+        }
+        break;
+
+    case TestPlatform.Models.Enums.QuestionType.MultipleChoice:
+        {
+            <p class="onTheLine" for="@($"answer{Model.AnswerId}")">
+                <input type="checkbox" @(Model.IsChecked ? "checked=\"checked\"" : "") disabled="disabled" />
+                @(Html.Raw(Model.AnswerText))
+            </p>
+            @if (Model.IsChecked)
+                        {<p class="onTheLine pBold green">(Correct Answer)</p> }
+        }
+        break;
+}

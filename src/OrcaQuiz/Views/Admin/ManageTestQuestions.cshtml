@@ -1,0 +1,86 @@
+﻿@model ManageTestQuestionsVM
+<style>
+    .buttons {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+<h1>Manage Test Questions</h1>
+<h3>@Model.TestName</h3>
+<p>@Model.Description</p>
+
+<a asp-controller="Admin" asp-action="CreateQuestion" asp-route-TestId="@Model.TestId">
+    <button class="orcaBtn BottomMargin20 btnWidth210 bgGreen">
+        <span class="fa fa-plus rightMargin5"></span>New Question
+    </button>
+</a>
+<a asp-controller="Admin" asp-action="Import" asp-route-TestId="@Model.TestId">
+    <button class="orcaBtn BottomMargin20 btnWidth210 bgGreen">
+        <span class="fa fa-download rightMargin5"></span>Import Questions
+    </button>
+</a>
+<div>
+    @foreach (var question in Model.Questions)
+            {
+        <div class="whiteSquare BottomMargin20" >
+
+            <div class="buttons rightFloat topMargin-8" onclick="">
+                    <a class="orcaBtn btnWidth40 rightMargin5 orcaTool-tooltip editQuestion" asp-controller="Admin" asp-action="UpdateQuestion" asp-route-questionId="@question.Id" asp-route-testId="@Model.TestId" data-toggle="tooltip" title="Edit Question">
+                        <span class="fa fa-pencil white LeftMargin5"></span>
+                    </a>
+                <a class="orcaBtn orcaTool-tooltip bgRed redT" asp-controller="Admin" asp-action="RemoveQuestion" asp-route-questionId="@question.Id" asp-route-testId="@Model.TestId" data-toggle="tooltip" title="Delete Question">
+                    <span class="fa fa-trash white btnSpan"></span>
+                </a>
+                <a id="@("btnPreview"+question.Id)" class="orcaBtn orcaTool-tooltip LeftMargin5" data-toggle="tooltip" title="Show" onclick="PartialPreview(@question.Id)">
+                    <span id="@("spanPreview"+question.Id)" class="fa fa-chevron-down white"></span>
+                </a>
+            </div>
+
+            @*<button id="@("toolTipID"+question.Id)" class="orcaTool-tooltip orcaBtn bgWhite orcaBlue btnWidth40" data-toggle="tooltip" title="Show">*@
+
+            @(Html.Raw("<i>" + (question.QuestionText)?
+                        .ToString().Replace("<video", "[INSERTED VIDEO]").Replace("<img", "[INSERTED IMAGE]").Replace("<iframe", "[FRAME]")
+                        .Substring(0, Math.Min(Html.Raw(question.QuestionText).ToString().Length, 50)) + "...</i>"))
+
+            <div id="@("detailsDiv"+question.Id)" hidden></div>
+        </div>
+    }
+</div>
+<!-- floatat knapparna till höger, bra? in i css isf. ändrat Go Back/save till endast Dashboard-->
+<a href="~/Admin/Dashboard">
+    <button class="orcaBtn btnWidth120 leftFloat">
+        <span class="fa fa-chevron-left rightMargin5"></span>Back
+    </button>
+</a>
+
+<script>
+    function PartialPreview(id) {
+        $.get("/Admin/PreviewQuestionPartial",
+            { id: id },
+            function (data) {
+                var showHidePreview = "#btnPreview" + id;
+                var showHideSpanPreview = "#spanPreview" + id;
+                var previewContent = "#detailsDiv" + id;
+
+                $(previewContent).html("</br>" + data);
+                $(previewContent).toggle();
+
+                if ($("#detailsDiv" + id).is(":hidden")) {
+                    $(showHideSpanPreview).removeClass("fa-chevron-up");
+                    $(showHideSpanPreview).addClass("fa-chevron-down");
+
+                    $(showHidePreview).attr("title", "Show")
+                        .tooltip("fixTitle")
+                        .tooltip("hide");
+                }
+                else {
+                    $(showHideSpanPreview).removeClass("fa-chevron-down");
+                    $(showHideSpanPreview).addClass("fa-chevron-up");
+
+                    $(showHidePreview).attr("title", "Hide")
+                        .tooltip("fixTitle")
+                        .tooltip("hide");
+                }
+            });
+    }
+</script>

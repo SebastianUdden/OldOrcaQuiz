@@ -1,0 +1,22 @@
+﻿@model ModuleVM
+@{
+    Layout = "_SmallInputLayout";
+}
+
+<h1>Module</h1>
+<form asp-controller="Admin" asp-action="CreateModule">
+    <label asp-for="Name"></label>
+    <input asp-for="Name" class="form-control BottomMargin20" />
+    <span asp-validation-for="Name"></span>
+
+    <label asp-for="Description"></label>
+    <input asp-for="Description" class="form-control BottomMargin20" />
+    <span asp-validation-for="Description"></span>
+
+    <label asp-for="Tags"></label>
+    <input asp-for="Tags" class="form-control BottomMargin20" />
+    <span asp-validation-for="Tags"></span>
+
+    <button onclick="window.history.back()" class="orcaBtn btnWidth120 TopMargin20 btnWidth120"><span class="fa fa-angle-left rightMargin5" aria-hidden="true"></span>Back</button>
+    <button type="submit" class="orcaBtn TopMargin20 onTheLine btnWidth120 bgGreen"><span class="fa fa-check rightMargin5"></span>Save</button>
+</form>

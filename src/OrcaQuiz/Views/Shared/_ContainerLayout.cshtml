@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "_RootLayout";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12"> @*transparentWhiteSquare*@
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@RenderSection("scripts", false)

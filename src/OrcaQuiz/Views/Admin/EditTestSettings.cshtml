@@ -1,0 +1,149 @@
+﻿@model TestSettingsFormVM
+@{
+    Layout = "_SmallInputLayout";
+}
+<form asp-controller="Admin" asp-action="EditTestSettings">
+    <h1 class="topMargin-8">Create Test</h1>
+
+    <label asp-for="TestName"></label>
+    <input asp-for="TestName" class="form-control BottomMargin20" />
+    <span asp-validation-for="TestName"></span>
+
+    <label asp-for="Description"></label>
+    <input asp-for="Description" class="form-control BottomMargin20" />
+    <span asp-validation-for="Description"></span>
+
+
+    <label asp-for="Tags"></label>
+    <input asp-for="Tags" class="form-control BottomMargin20" />
+    <span asp-validation-for="Tags"></span>
+
+    <label asp-for="TimeLimitInMinutes"></label>
+    <input asp-for="TimeLimitInMinutes" class="form-control BottomMargin20" />
+    <span asp-validation-for="TimeLimitInMinutes"></span>
+
+    <div class="bgWhite" style="padding: 20px">
+        <h2 class="grayText topMargin-8">On Completion</h2>
+
+        <br />
+        <div class="row LeftMargin5">
+            <div class="leftFloat rightMargin10"><input asp-for="ShowPassOrFail" class="form-control" /></div>
+            <div class="leftFloat"><label asp-for="ShowPassOrFail"></label></div>
+        </div>
+        <span asp-validation-for="ShowPassOrFail"></span>
+        <br />
+        <div class="row LeftMargin5">
+            <div class="leftFloat rightMargin10"><input asp-for="ShowTestScore" class="form-control BottomMargin20" /></div>
+            <div class="leftFloat"><label asp-for="ShowTestScore"></label></div>
+        </div>
+        <span asp-validation-for="ShowTestScore"></span>
+        <br />
+        <label asp-for="PassPercentage"></label>
+        <input asp-for="PassPercentage" class="form-control BottomMargin20" />
+        <span asp-validation-for="PassPercentage"></span>
+
+        <label asp-for="NumberOfFeaturedQuestions"></label>
+        <input asp-for="NumberOfFeaturedQuestions" class="form-control BottomMargin20" />
+        <span asp-validation-for="NumberOfFeaturedQuestions"></span>
+
+        <label asp-for="CustomCompletionMessage"></label>
+        <textarea asp-for="CustomCompletionMessage" class="form-control BottomMargin20" rows="5"></textarea>
+        <span asp-validation-for="CustomCompletionMessage"></span>
+
+        <h3>Certificate Settings</h3>
+        <label asp-for="CertificateAuthor"></label>
+        <input asp-for="CertificateAuthor" class="form-control BottomMargin20" />
+        <span asp-validation-for="CertificateAuthor"></span>
+
+        <label asp-for="CertificateCompany"></label>
+        <input asp-for="CertificateCompany" class="form-control BottomMargin20" />
+        <span asp-validation-for="CertificateCompany"></span>
+
+        <label asp-for="CertificateCustomText"></label>
+        <textarea asp-for="CertificateCustomText" class="form-control BottomMargin20" rows="5"></textarea>
+        <span asp-validation-for="CertificateCustomText"></span>
+
+        <label asp-for="CertTemplatePath"></label>
+        <input asp-for="CertTemplatePath" class="form-control BottomMargin20" />
+        <span asp-validation-for="CertTemplatePath"></span>
+
+        <div class="row LeftMargin5">
+            <div class="leftFloat rightMargin10"><input asp-for="EnableCertDownloadOnCompletion" class="form-control BottomMargin20" /></div>
+            <div class="leftFloat"><label asp-for="EnableCertDownloadOnCompletion"></label></div>
+        </div>
+        <span asp-validation-for="EnableCertDownloadOnCompletion"></span>
+        <br />
+        <div class="row LeftMargin5">
+            <div class="leftFloat rightMargin10"><input asp-for="EnableEmailCertOnCompletion" class="form-control BottomMargin20" /></div>
+            <div class="leftFloat"><label asp-for="EnableEmailCertOnCompletion"></label></div>
+            <span asp-validation-for="EnableEmailCertOnCompletion"></span>
+        </div>
+
+    </div>
+    <button onclick="window.history.back()" class="orcaBtn btnWidth120 TopMargin20 btnWidth120"><span class="fa fa-angle-left rightMargin5" aria-hidden="true"></span>Back</button>
+    <button type="submit" class="orcaBtn TopMargin20 onTheLine btnWidth120 bgGreen"><span class="fa fa-check rightMargin5"></span>Save</button>
+
+    @*<button type="submit" class="orcaBtn TopMargin20 onTheLine btnWidth120 bgGreen"><span class="fa fa-check rightMargin5"></span>Create</button>*@
+    @*<h2>Settings</h2>
+    <label asp-for="TestName"></label>
+    <input asp-for="TestName" class="form-control BottomMargin20" />
+    <span asp-validation-for="TestName"></span>
+
+
+    <label asp-for="Description"></label>
+    <input asp-for="Description" class="form-control BottomMargin20" />
+    <span asp-validation-for="Description"></span>
+
+
+    <label asp-for="Tags"></label>
+    <input asp-for="Tags" class="form-control BottomMargin20" />
+    <span asp-validation-for="Tags"></span>
+
+    <label asp-for="TimeLimitInMinutes"></label>
+    <input asp-for="TimeLimitInMinutes" class="form-control BottomMargin20" />
+    <span asp-validation-for="TimeLimitInMinutes"></span>
+
+    <div class="bgWhite" style="padding: 20px">
+        <h2 class="grayText topMargin-8">On Completion</h2>
+
+        <br />
+        <div class="row LeftMargin5">
+            <div class="leftFloat rightMargin10"><input asp-for="ShowPassOrFail" class="form-control" /></div>
+            <div class="leftFloat"><label asp-for="ShowPassOrFail"></label></div>
+        </div>
+        <span asp-validation-for="ShowPassOrFail"></span>
+        <br />
+        <div class="row LeftMargin5">
+            <div class="leftFloat rightMargin10"><input asp-for="ShowTestScore" class="form-control BottomMargin20" /></div>
+            <div class="leftFloat"><label asp-for="ShowTestScore"></label></div>
+        </div>
+        <span asp-validation-for="ShowTestScore"></span>
+        <br />
+        <label asp-for="PassPercentage"></label>
+        <input asp-for="PassPercentage" class="form-control BottomMargin20" />
+        <span asp-validation-for="PassPercentage"></span>
+
+        <label asp-for="CustomCompletionMessage"></label>
+        <textarea asp-for="CustomCompletionMessage" class="form-control BottomMargin20" rows="5"></textarea>
+        <span asp-validation-for="CustomCompletionMessage"></span>
+
+        <label asp-for="CertTemplatePath"></label>
+        <input asp-for="CertTemplatePath" class="form-control BottomMargin20" />
+        <span asp-validation-for="CertTemplatePath"></span>
+
+        <div class="row LeftMargin5">
+            <div class="leftFloat rightMargin10"><input asp-for="EnableCertDownloadOnCompletion" class="form-control BottomMargin20" /></div>
+            <div class="leftFloat"><label asp-for="EnableCertDownloadOnCompletion"></label></div>
+        </div>
+        <span asp-validation-for="EnableCertDownloadOnCompletion"></span>
+        <br />
+        <div class="row LeftMargin5">
+            <div class="leftFloat rightMargin10"><input asp-for="EnableEmailCertOnCompletion" class="form-control BottomMargin20" /></div>
+            <div class="leftFloat"><label asp-for="EnableEmailCertOnCompletion"></label></div>
+            <span asp-validation-for="EnableEmailCertOnCompletion"></span>
+        </div>
+
+    </div>
+    <button onclick="window.history.back()" class="orcaBtn btnWidth120 TopMargin20 btnWidth120"><span class="fa fa-angle-left rightMargin5" aria-hidden="true"></span>Back</button>
+    <button type="submit" class="orcaBtn TopMargin20 onTheLine btnWidth120 bgGreen"><span class="fa fa-check rightMargin5"></span>Save</button>*@
+</form>

@@ -1,0 +1,431 @@
+﻿@model ShowResultsVM
+<div ng-controller="myCtrl">
+    <div class="container">
+        <h1>Test Results</h1>
+        <p class="pBold onTheLine leftFloat orcaBlue">Pass threshold: </p><p class="orcaBlue onTheLine leftFloat LeftMargin5">{{viewModel.resultData.passPercentage}}%</p>
+        <br /><br />
+        <button class="orcaBtn" onclick="showAll();">Show All</button>
+    </div>
+    <div class="container row" ng-mousemove="filterSwitch();">
+        <div class="col-xs-6">
+            <canvas id="testScoreTotalAmountPassed" width="600" height="350"></canvas>
+            <br />
+            <br />
+            <p style="color:gray; text-align:center;">Pass ({{percentageOfStudentsWhoPassed}}%)<span class="passColor" onclick="document.getElementById('showFilter').innerHTML = 'pass';"></span><span class="LeftMargin20">Fail ({{percentageOfStudentsWhoFailed}}%)<span class="failColor" onclick="document.getElementById('showFilter').innerHTML = 'fail';"></span></span></p>
+        </div>
+        <div class="col-xs-6">
+            <canvas id="testScoreSegments" height="200"></canvas>
+            <div id="bar-legend" ng-hide="true"></div>
+            <div id="showFilter" ng-hide="true"></div>
+        </div>
+    </div>
+    <div class="container row">
+        <form role="form" style="width:30%;">
+            <div class="input-group right-inner-addon">
+                <input type="text" class="form-control input-group-sm" style="margin-left:0;background-color:rgba(255, 255, 255, 0.36);font-size:large;" ng-model="search" placeholder="Search Class" />
+                <i class="glyphicon glyphicon-search"></i>
+            </div>
+        </form>
+        <table id="studentsTakingTest">
+            <tr>
+                <th><a href="#" ng-click="order.field = 'name'; order.reverse = !order.reverse">Student Name<span ng-show="order.field == 'name'" class="fa fa-caret-down LeftMargin5"></span></a></th>
+                <th><a href="#" ng-click="order.field = 'email'; order.reverse = !order.reverse">E-mail<span ng-show="order.field == 'email'" class="fa fa-caret-down LeftMargin5"></span></a></th>
+                <th><a href="#" ng-click="order.field = 'testscore'; order.reverse = !order.reverse">Test Score<span ng-show="order.field == 'testscore'" class="fa fa-caret-down LeftMargin5"></span></a></th>
+            </tr>
+            <tr ng-repeat="student in viewModel.students | orderBy:dynamicOrder:order.reverse | filter:studentFilter | filter:search">
+                <td>{{student.name}}</td>
+                <td>{{student.email}}</td>
+                <td>
+                    <span class="rightMargin5">{{student.testscore}}<span class="pBold"> / </span>{{viewModel.resultData.maxScore}}</span>
+                    <span ng-if="studentPassed(student);" class="orcaBlue pBold">({{((student.testscore * 100) / viewModel.resultData.maxScore) | number:0}}%)</span>
+                    <span ng-if="studentFailed(student);" class="aquaBlue pBold">({{((student.testscore * 100) / viewModel.resultData.maxScore) | number:0}}%)</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <style>
+        .right-inner-addon {
+            position: relative;
+        }
+
+            .right-inner-addon input {
+                padding-right: 30px;
+            }
+
+            .right-inner-addon i {
+                position: absolute;
+                right: 0px;
+                padding: 10px 12px;
+                pointer-events: none;
+            }
+
+        a {
+            text-decoration: none !important;
+            color: white;
+        }
+
+            a:hover {
+                color: antiquewhite;
+            }
+
+            a:visited {
+                color: whitesmoke !important;
+            }
+
+        .passColor {
+            background-color: #4383BA;
+            padding-right: 40px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        .passColor:hover {
+            background-color:#2b679b;
+        }
+
+        .failColor {
+            background-color: #4BCAB4;
+            padding-right: 40px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        .failColor:hover {
+            background-color:#47bca8;
+        }
+
+        table {
+            margin: 0 auto;
+            width: 100%;
+            margin-top: 1% !important;
+        }
+
+        th, td {
+            width: 33%;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #bcc5d1 !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #e8e8e8;
+        }
+
+        th {
+            background-color: #4383BA;
+            color: white;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .p {
+            text-align: center;
+            font-size: 14px;
+            padding-top: 140px;
+        }
+    </style>
+
+</div>
+@section scripts {
+    <script>
+        var model = @Html.Raw(this.Model.ResultDataJSON);
+        var amountOfStudentsWhoPassed = 0;
+        var amountOfStudentsWhoFailed = 0;
+
+        
+        var showAll = function() {
+            document.getElementById('showFilter').innerHTML = 'showAll';
+        };
+
+        for (var i = 0; i < model.students.length; i++) {
+            if (model.students[i].testscore >= model.resultData.passResult)
+                amountOfStudentsWhoPassed++;
+            else
+                amountOfStudentsWhoFailed++;
+        }
+
+        app.value("viewModel", model);
+
+        app.controller('myCtrl', ['$scope', '$window', 'viewModel', function ($scope, $window, viewModel) {
+            $scope.viewModel = viewModel;
+            $scope.amountOfStudentsWhoPassed = 0;
+            $scope.percentageOfStudentsWhoPassed = 0;
+            $scope.amountOfStudentsWhoFailed = 0;
+            $scope.percentageOfStudentsWhoFailed = 0;
+            $scope.totalAmountOfStudentsTakingTest = 0;
+
+            $scope.studentCounter = function() {
+                for (var i = 0; i < viewModel.students.length; i++) {
+                    if (model.students[i].testscore >= model.resultData.passResult)
+                        $scope.amountOfStudentsWhoPassed++;
+                    else
+                        $scope.amountOfStudentsWhoFailed++;
+                }
+                $scope.totalAmountOfStudentsTakingTest = $scope.amountOfStudentsWhoPassed + $scope.amountOfStudentsWhoFailed;
+                $scope.percentageOfStudentsWhoPassed = ($scope.amountOfStudentsWhoPassed / $scope.totalAmountOfStudentsTakingTest) * 100;
+                $scope.percentageOfStudentsWhoFailed = ($scope.amountOfStudentsWhoFailed / $scope.totalAmountOfStudentsTakingTest) * 100;
+            };
+            $scope.studentCounter();
+
+            $scope.studentPassed = function(student) {
+                if ($scope.viewModel.resultData.passResult <= student.testscore) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            };
+
+            $scope.studentFailed = function(student) {
+                if ($scope.viewModel.resultData.passResult > student.testscore) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            };
+
+            $scope.filterSwitch = function () {
+                $scope.order = {
+                    field: 'testscore',
+                    reverse: true
+                };
+                switch ($('#showFilter').text()) {
+                    case '0to19%':
+                        $scope.studentFilter = $scope.column1;
+                        break;
+                    case '20to39%':
+                        $scope.studentFilter = $scope.column2;
+                        break;
+                    case '40to59%':
+                        $scope.studentFilter = $scope.column3;
+                        break;
+                    case '60to79%':
+                        $scope.studentFilter = $scope.column4;
+                        break;
+                    case '80to100%':
+                        $scope.studentFilter = $scope.column5;
+                        break;
+                    case 'fail':
+                        $scope.studentFilter = $scope.fail;
+                        break;
+                    case 'pass':
+                        $scope.studentFilter = $scope.pass;
+                        break;
+                    case 'showAll':
+                        $scope.studentFilter = $scope.showAll;
+                    default:
+                }
+            }
+
+            $scope.studentFilter = {};
+            $scope.pass = function (student) {
+                return student.testscore >= $scope.viewModel.resultData.passResult;
+            }
+            $scope.fail = function (student) {
+                return student.testscore < $scope.viewModel.resultData.passResult;
+            }
+            $scope.showAll = function (student) {
+                return student.testscore >= 0;
+            }
+            $scope.column1 = function (student) {
+                var min = $scope.viewModel.resultData.maxScore * 0.0;
+                var max = $scope.viewModel.resultData.maxScore * 0.2;
+                return student.testscore >= min && student.testscore < max;
+            }
+            $scope.column2 = function (student) {
+                var min = $scope.viewModel.resultData.maxScore * 0.2;
+                var max = $scope.viewModel.resultData.maxScore * 0.4;
+                return student.testscore >= min && student.testscore < max;
+            }
+            $scope.column3 = function (student) {
+                var min = $scope.viewModel.resultData.maxScore * 0.4;
+                var max = $scope.viewModel.resultData.maxScore * 0.6;
+                return student.testscore >= min && student.testscore < max;
+            }
+            $scope.column4 = function (student) {
+                var min = $scope.viewModel.resultData.maxScore * 0.6;
+                var max = $scope.viewModel.resultData.maxScore * 0.8;
+                return student.testscore >= min && student.testscore < max;
+            }
+            $scope.column5 = function (student) {
+                var min = $scope.viewModel.resultData.maxScore * 0.8;
+                var max = $scope.viewModel.resultData.maxScore * 1;
+                return student.testscore >= min && student.testscore <= max;
+            }
+
+            $scope.order = {
+                field: 'testscore',
+                reverse: true
+            };
+
+            $scope.dynamicOrder = function (user) {
+                var order = 0;
+                switch ($scope.order.field) {
+                    default:
+                        order = user[$scope.order.field];
+                }
+                return order;
+            }
+        }]);
+
+        $(function () {
+            var column1 = function (student) {
+                var min = model.resultData.maxScore * 0.0;
+                var max = model.resultData.maxScore * 0.2;
+                return student.testscore >= min && student.testscore < max;
+            };
+            var column2 = function (student) {
+                var min = model.resultData.maxScore * 0.2;
+                var max = model.resultData.maxScore * 0.4;
+                return student.testscore >= min && student.testscore < max;
+            };
+            var column3 = function (student) {
+                var min = model.resultData.maxScore * 0.4;
+                var max = model.resultData.maxScore * 0.6;
+                return student.testscore >= min && student.testscore < max;
+            };
+            var column4 = function (student) {
+                var min = model.resultData.maxScore * 0.6;
+                var max = model.resultData.maxScore * 0.8;
+                return student.testscore >= min && student.testscore < max;
+            };
+            var column5 = function (student) {
+                var min = model.resultData.maxScore * 0.8;
+                var max = model.resultData.maxScore * 1;
+                return student.testscore >= min && student.testscore <= max;
+            };
+
+            var students = model.students;
+            var numberOfStudentsInColumn = {
+                one: 0,
+                two: 0,
+                three: 0,
+                four: 0,
+                five: 0
+            };
+
+            students.forEach(function(student) {
+                if (column1(student)) {
+                    numberOfStudentsInColumn.one++;
+                }
+                else if (column2(student)) {
+                    numberOfStudentsInColumn.two++;
+                }
+                else if (column3(student)) {
+                    numberOfStudentsInColumn.three++;
+                }
+                else if (column4(student)) {
+                    numberOfStudentsInColumn.four++;
+                }
+                else if (column5(student)) {
+                    numberOfStudentsInColumn.five++;
+                }
+            });
+
+            var testScoreSegmentsData = {
+                labels: ["0-19%", "20-39%", "40-59%", "60-79%", "80-100%", "All Students"],
+                datasets: [
+                    {
+                        label: "Testresultat",
+                        fillColor: "#4383BA",
+                        highlightFill: "#356691",
+                        data: [
+                            numberOfStudentsInColumn.one,
+                            numberOfStudentsInColumn.two, 
+                            numberOfStudentsInColumn.three, 
+                            numberOfStudentsInColumn.four, 
+                            numberOfStudentsInColumn.five, 
+                            model.students.length
+                        ]
+                    },
+                ]
+            }
+
+            var ctx = document.getElementById("testScoreSegments").getContext("2d");
+            var testChart = new Chart(ctx).Bar(testScoreSegmentsData, {
+                responsive: true,
+                barValueSpacing: 2,
+                animateScale: true,
+            });
+            var canvas = document.getElementById('testScoreSegments');
+
+            document.getElementById('bar-legend').innerHTML = testChart.generateLegend();
+            var legendHolder = document.getElementById('bar-legend');
+
+            canvas.onclick = function (evt) {
+                var activePoints = testChart.getBarsAtEvent(evt);
+                console.log(activePoints);
+                console.log(activePoints[0].label);
+                switch (activePoints[0].label) {
+                    case "0-19%":
+                        document.getElementById('showFilter').innerHTML = '0to19%';
+                        break;
+                    case "20-39%":
+                        document.getElementById('showFilter').innerHTML = '20to39%';
+                        break;
+                    case "40-59%":
+                        document.getElementById('showFilter').innerHTML = '40to59%';
+                        break;
+                    case "60-79%":
+                        document.getElementById('showFilter').innerHTML = '60to79%';
+                        break;
+                    case "80-100%":
+                        document.getElementById('showFilter').innerHTML = '80to100%';
+                        break;
+                    case "All Students":
+                        document.getElementById('showFilter').innerHTML = 'showAll';
+                        break;
+                    default:
+                }
+            };
+
+            var pieData = [
+                {
+                    label: "Fail",
+                    value: amountOfStudentsWhoFailed,
+                    color: "#4BCAB4",
+                    highlight: "#47bca8"
+                },
+                {
+                    label: "Pass",
+                    value: amountOfStudentsWhoPassed,
+                    color: "#4383BA",
+                    highlight: "#356691"
+                }
+            ];
+
+            var pieOptions = {
+                responsive: true,
+                segmentShowStroke: false,
+                animateScale: true
+            }
+
+            var pieStudents = document.getElementById("testScoreTotalAmountPassed").getContext("2d");
+            var myChart = new Chart(pieStudents).Doughnut(pieData, pieOptions);
+
+            var canvas2 = document.getElementById('testScoreTotalAmountPassed');
+            canvas2.onclick = function (evt) {
+                var activePoints = myChart.getSegmentsAtEvent(evt);
+                console.log(activePoints);
+                console.log(activePoints[0].label);
+                switch (activePoints[0].label) {
+                    case "Fail":
+                        document.getElementById('showFilter').innerHTML = 'fail';
+                        break;
+                    case "Pass":
+                        document.getElementById('showFilter').innerHTML = 'pass';
+                        break;
+                    default:
+                }
+            };
+        })
+    </script>
+}
+

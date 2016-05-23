@@ -1,0 +1,15 @@
+﻿@model SessionIndexVM
+<h1>Test Session</h1>
+<div class="whiteSquare">
+    <h3 class="topMargin-8">@Model.TestName</h3>
+    <p class="pBold onTheLine">Test Name: </p><p class="onTheLine"> @Model.TestName</p>
+    <br />
+    <p class="pBold onTheLine">Test Description: </p><p class="onTheLine">@Model.TestDescription</p>
+    <br />
+    <p class="pBold onTheLine">Questions: </p><p class="onTheLine"> @Model.NumberOfQuestions</p>
+    <br />
+    <p class="pBold onTheLine">Time Limit: </p><p class="onTheLine"> @Model.TimeLimit</p>
+    <br />
+
+    <a asp-action="StartSession" asp-controller="TestSession" asp-route-testId="@Model.TestId"><button class="orcaBtn btnWidth120 TopMargin20">Start test</button></a>
+</div>

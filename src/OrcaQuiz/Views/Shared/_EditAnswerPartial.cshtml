@@ -1,0 +1,6 @@
+﻿@model AnswerDetailVM
+
+<div>
+    <textarea asp-for="@Model.AnswerText" placeholder="@Model.AnswerText" id=@("mceAnswerBox"+ Model.AnswerId) class="mceAnswerBox"></textarea>
+    <span asp-validation-for="@Model.AnswerText" class="text-danger"></span>
+</div>

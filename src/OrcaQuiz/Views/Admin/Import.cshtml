@@ -1,0 +1,143 @@
+﻿@model ImportVM
+
+<h1>Import Questions</h1>
+<div class="row whiteSquare">
+    <div class="col-md-5">
+        <h3>All tests</h3>
+        <div id="allTestsDiv">
+        </div>
+
+        <button type="button" class="orcaBtn TopMargin20" value="Copy Selected To Test" id="copySelectedButton" > Copy Selected<span class="fa fa-arrow-right LeftMargin5"></span></button>
+    </div>
+    <div class="col-md-5">
+        <h3>Current test</h3>
+        <fieldset>
+            <div id="currentTestDiv">
+            </div>
+        </fieldset>
+        <button type="button" class="bgRed TopMargin20" value="Delete Selected From Test" id="deleteSelectedButton"><span class="fa fa-trash rightMargin5"></span> Delete Selected</button>
+    </div>
+</div>
+<a href="~/Admin/Test/@Model.TestId"><button class="orcaBtn btnWidth175 TopMargin20"><span class="fa fa-chevron-left rightMargin5"></span>Return to Test</button></a>
+
+<style>
+    .jstree-anchor {
+        /*enable wrapping*/
+        white-space: normal !important;
+        /*ensure lower nodes move down*/
+        height: auto !important;
+        /*offset icon width*/
+        padding: 5px;
+        padding-right: 24px;
+        margin: 2px;
+        border-radius: 4px;
+        color: white !important;
+        font-size: medium;
+        background-color: #5b99cf !important;
+        /*overflow:hidden;*/
+        width: 90%;
+        overflow-wrap: normal;
+    }
+
+        .jstree-anchor:hover {
+            background-color: #37638a !important;
+        }
+</style>
+
+@section scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
+    <script type="text/javascript">
+
+        //----------------------
+
+        $(document).ready(function()
+        {
+            $.get("/Admin/GetImportData",
+                { id: @Model.TestId },
+                function(data) {
+                    var allTestsData = data.allTestsData;
+                    var currentTestData = data.currentTestData;
+
+                    $('#allTestsDiv').jstree(
+                        { 'core' : {
+                            'themes' : {"icons": false},
+                            'data' : allTestsData,
+                        },
+                            'plugins' : [
+                                        'checkbox',
+                                        "search"
+                            ]
+                        });
+
+                    $('#currentTestDiv').jstree(
+                       { 'core' : {
+                           'themes' : {"icons": false},
+                           'data' : currentTestData,
+                       },
+                           'plugins' : [
+                                   'checkbox'
+                           ]});
+                });
+
+            $("#copySelectedButton").click(function()
+            {
+                var selectedElms = $('#allTestsDiv').jstree(true).get_selected('full',true);
+                var idPrefix = "@(AppConstants.Import_QuestionIdPrefix)";
+                var ids = [];
+
+                for (var i = 0; i < selectedElms.length; i++) {
+                    var id = selectedElms[i].id;
+                    if (id.substring(0, idPrefix.length) == idPrefix)
+                        ids.push(id.substring(idPrefix.length));
+                }
+
+                $.post("/Admin/CopyQuestionsToTest",
+                    { testId: @Model.TestId, questionIds: ids },
+                    function(data) {
+                        $('#currentTestDiv').jstree("destroy");
+
+                        $('#currentTestDiv').jstree(
+                        { 'core' : {
+                            'themes' : {"icons": false},
+                            'data' : data,
+                        },
+                            'plugins' : [
+                                       'checkbox'
+                            ]});
+                    });
+            });
+        });
+
+
+        $("#deleteSelectedButton").click(function()
+        {
+            var selectedElms = $('#currentTestDiv').jstree(true).get_selected('full',true);
+            var idPrefix = "@(AppConstants.Import_QuestionIdPrefix)";
+            var ids = [];
+
+            for (var i = 0; i < selectedElms.length; i++) {
+                var id = selectedElms[i].id;
+                if (id.substring(0, idPrefix.length) == idPrefix)
+                    ids.push(id.substring(idPrefix.length));
+            }
+
+
+            $.post("/Admin/DeleteQuestionsFromTest",
+                { testId: @Model.TestId, questionIds: ids },
+                function(data) {
+                    $('#currentTestDiv').jstree("destroy");
+
+                    $('#currentTestDiv').jstree(
+                    { 'core' : {
+                        'themes' : {"icons": false},
+                        'data' : data,
+                    },
+                        'plugins' : [
+                                   'checkbox'
+                        ]});
+                });
+        });
+    </script>
+}
