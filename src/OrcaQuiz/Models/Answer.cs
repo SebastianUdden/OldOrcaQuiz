@@ -12,5 +12,6 @@ namespace TestPlatform.Models
         public string AnswerText { get; set; }
         public bool IsCorrect { get; set; }
         public int SortOrder { get; set; }
+
     }
 }
