@@ -47,7 +47,7 @@ namespace OrcaQuiz
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddSingleton<IOrcaQuizRepository, DbRepository>();
+            services.AddSingleton<IOrcaQuizRepository, TestRepository>();
             services.AddMvc();
         }
 

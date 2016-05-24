@@ -124,7 +124,6 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 1,
                         Id = 1,
-                        Name = "First Question",
                         QuestionText = /*@"<iframe src=""//www.youtube.com/embed/ncclpqQzjY0"" width=""auto"" height=""auto"" allowfullscreen=""allowfullscreen""></iframe>"*/"How do you write into console.",
                         QuestionType = QuestionType.SingleChoice,
                         Tags = "C#" + "," + "hard",
@@ -139,7 +138,6 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 1,
                         Id = 2,
-                        Name = "Second Question",
                         QuestionText = "What is the meaning of life?",
                         QuestionType = QuestionType.SingleChoice,
                         Tags = "Life" + "," + "medium",
@@ -154,7 +152,6 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 1,
                         Id = 3,
-                        Name = "Third Question",
                         QuestionText = "Who can survive an atomic blast?",
                         QuestionType = QuestionType.MultipleChoice,
                         Tags = "Life" + "," + "medium",
@@ -192,7 +189,6 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 2,
                         Id = 4,
-                        Name = "<p>What is a variable?</p>",
                         QuestionText = "What is a variable?",
                         QuestionType = QuestionType.MultipleChoice,
                         Tags = "Music" + "," + "medium",
@@ -208,7 +204,6 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 2,
                         Id = 5,
-                        Name = "Second Question",
                         QuestionText = @"<iframe src=""//www.youtube.com/embed/ncclpqQzjY0"" width=""560"" height=""314"" allowfullscreen=""allowfullscreen""></iframe>",
                         QuestionType = QuestionType.MultipleChoice,
                         Tags = "Music" + "," + "medium",
@@ -561,7 +556,6 @@ namespace OrcaQuiz.Repositories
             {
                 //Duplicate original question
                 Answers = thisQuestion.Answers,
-                Name = thisQuestion.Name,
                 QuestionType = thisQuestion.QuestionType,
                 Tags = thisQuestion.Tags,
                 QuestionText = thisQuestion.QuestionText,
