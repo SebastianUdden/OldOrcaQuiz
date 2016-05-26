@@ -10,9 +10,10 @@ namespace OrcaQuiz.Models
         public int Id { get; set; }
         //public int? TestId { get; set; }
         public int? ModuleId { get; set; }
+        public virtual Module Module { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string AuthorId { get; set; } //Sekundärnyckel till användaren
+        public int AuthorId { get; set; } //Sekundärnyckel till användaren
         public string Tags { get; set; }
         public bool IsPublished { get; set; }
         public virtual List<Question> Questions { get; set; }
@@ -21,9 +22,9 @@ namespace OrcaQuiz.Models
         public bool ShowTestScore { get; set; }
         public int? PassPercentage { get; set; }
         public string CustomCompletionMessage { get; set; }
-        public string CertTemplatePath { get; set; }
-        public bool EnableCertDownloadOnCompletion { get; set; }
-        public bool EnableEmailCertOnCompletion { get; set; }
+        public string CertificateTemplatePath { get; set; }
+        public bool EnableCertificateDownloadOnCompletion { get; set; }
+        public bool EnableEmailCertificateOnCompletion { get; set; }
         public virtual ICollection<TestSession> TestSessions { get; set; }
         public string CertificateCompany { get; set; }
         public string CertificateAuthor { get; set; }

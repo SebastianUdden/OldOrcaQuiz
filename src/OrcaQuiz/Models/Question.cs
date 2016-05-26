@@ -10,8 +10,9 @@ namespace OrcaQuiz.Models
     {
         public int Id { get; set; }
         public int? TestId { get; set; }
+        public virtual Test Test { get; set; }
         public int? SortOrder { get; set; }
-        public string Name { get; set; }
+        //public string Name { get; set; }
         public string QuestionText { get; set; }
         public QuestionType QuestionType { get; set; }
         public string Author { get; set; }

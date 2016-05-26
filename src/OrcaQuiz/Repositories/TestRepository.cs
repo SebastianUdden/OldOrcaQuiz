@@ -12,7 +12,7 @@ using OrcaQuiz.ViewModels;
 
 namespace OrcaQuiz.Repositories
 {
-    public class TestRepository : IOrcaQuizRepository
+    public class TestPlatformRepository : IOrcaQuizRepository
     {
         public List<Module> _modules { get; set; }
         public List<Test> _tests { get; set; }
@@ -47,7 +47,7 @@ namespace OrcaQuiz.Repositories
             return (_tests.SelectMany(o => o.Questions).SelectMany(q => q.Answers)).ToArray();
         }
 
-        public TestRepository()
+        public TestPlatformRepository()
         {
             _modules = new List<Module>();
             _tests = new List<Test>();
@@ -111,7 +111,7 @@ namespace OrcaQuiz.Repositories
             {
                 Id = 1,
                 //Tags = new List<string>() { "Eazy", "awesome", "heavy" },
-                AuthorId = "Linus Joensson",
+                AuthorId = 1,
                 Name = "Basic C#",
                 Description = "An eazy test",
                 CertificateAuthor = "Patrik J",
@@ -124,7 +124,7 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 1,
                         Id = 1,
-                        Name = "First Question",
+                        //Name = "First Question",
                         QuestionText = /*@"<iframe src=""//www.youtube.com/embed/ncclpqQzjY0"" width=""auto"" height=""auto"" allowfullscreen=""allowfullscreen""></iframe>"*/"How do you write into console.",
                         QuestionType = QuestionType.SingleChoice,
                         Tags = "C#" + "," + "hard",
@@ -139,7 +139,7 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 1,
                         Id = 2,
-                        Name = "Second Question",
+                        //Name = "Second Question",
                         QuestionText = "What is the meaning of life?",
                         QuestionType = QuestionType.SingleChoice,
                         Tags = "Life" + "," + "medium",
@@ -154,7 +154,7 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 1,
                         Id = 3,
-                        Name = "Third Question",
+                        //Name = "Third Question",
                         QuestionText = "Who can survive an atomic blast?",
                         QuestionType = QuestionType.MultipleChoice,
                         Tags = "Life" + "," + "medium",
@@ -182,7 +182,7 @@ namespace OrcaQuiz.Repositories
             {
                 Id = 2,
                 //Tags = new List<string>() { "Eazy", "awesome", "heavy" },
-                AuthorId = "Linus Joensson",
+                AuthorId = 1,
                 Name = "My Second Test",
                 Description = "An eazy test",
                 #region Questions
@@ -192,7 +192,7 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 2,
                         Id = 4,
-                        Name = "<p>What is a variable?</p>",
+                        //Name = "<p>What is a variable?</p>",
                         QuestionText = "What is a variable?",
                         QuestionType = QuestionType.MultipleChoice,
                         Tags = "Music" + "," + "medium",
@@ -208,7 +208,7 @@ namespace OrcaQuiz.Repositories
                     {
                         TestId = 2,
                         Id = 5,
-                        Name = "Second Question",
+                        //Name = "Second Question",
                         QuestionText = @"<iframe src=""//www.youtube.com/embed/ncclpqQzjY0"" width=""560"" height=""314"" allowfullscreen=""allowfullscreen""></iframe>",
                         QuestionType = QuestionType.MultipleChoice,
                         Tags = "Music" + "," + "medium",
@@ -513,15 +513,15 @@ namespace OrcaQuiz.Repositories
                 CertificateAuthor = test.CertificateAuthor,
                 CertificateCompany = test.CertificateCompany,
                 CertificateCustomText = test.CertificateCustomText,
-                CertTemplatePath = test.CertTemplatePath,
+                CertificateTemplatePath = test.CertificateTemplatePath,
                 CustomCompletionMessage = test.CustomCompletionMessage,
-                EnableCertDownloadOnCompletion = test.EnableCertDownloadOnCompletion,
-                EnableEmailCertOnCompletion = test.EnableEmailCertOnCompletion,
+                EnableCertificateDownloadOnCompletion = test.EnableCertificateDownloadOnCompletion,
+                EnableEmailCertificateOnCompletion = test.EnableEmailCertificateOnCompletion,
 
                 //Static
                 IsPublished = true,
                 //Tags = new List<string>() { "happy", "insane" },
-                AuthorId = _users.ElementAt(0).FirstName,
+                AuthorId = _users.ElementAt(0).Id,
             });
 
             return _tests.Last().Id;
@@ -552,7 +552,7 @@ namespace OrcaQuiz.Repositories
 
         }
 
-        public void CopyQuestionToTest(int questionId, int testId)
+        public void CopyQuestionToTest(int questionId, int testId, string userName)
         {
             var thisTest = _tests.Single(o => o.Id == testId);
             var thisQuestion = GetAllQuestions().Single(o => o.Id == questionId);
@@ -561,7 +561,7 @@ namespace OrcaQuiz.Repositories
             {
                 //Duplicate original question
                 Answers = thisQuestion.Answers,
-                Name = thisQuestion.Name,
+                //Name = thisQuestion.Name,
                 QuestionType = thisQuestion.QuestionType,
                 Tags = thisQuestion.Tags,
                 QuestionText = thisQuestion.QuestionText,
@@ -951,6 +951,30 @@ namespace OrcaQuiz.Repositories
                 ModuleName = module.Name,
                 Tests = module.Tests
             };
+        }
+
+        public void UpdateQuestion(int testId, int questionId, EditQuestionVM viewModel)
+        {
+            var question = GetAllQuestions().SingleOrDefault(o => o.Id == questionId);
+            question.SortOrder = viewModel.SortOrder;
+            question.QuestionType = viewModel.Type;
+            question.HasComment = viewModel.HasComment;
+            question.QuestionText = viewModel.QuestionText;
+        }
+
+        AnswerDetailVM IOrcaQuizRepository.UpdateAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetAllTestsImportData(int currentTestId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetCurrentTestImportData(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

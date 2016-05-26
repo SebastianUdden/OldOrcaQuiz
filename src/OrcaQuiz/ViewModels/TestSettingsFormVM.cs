@@ -58,5 +58,7 @@ namespace OrcaQuiz.ViewModels
         [Display(Name = "Number of active questions per test")]
         [Range(1, 1000, ErrorMessage = "Number must be between 1 and 1000")]
         public int? NumberOfFeaturedQuestions { get; set; }
+
+        public string UserName { get; set; }
     }
 }

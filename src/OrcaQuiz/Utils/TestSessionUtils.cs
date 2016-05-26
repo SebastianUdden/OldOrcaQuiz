@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using OrcaQuiz.Models;
+using OrcaQuiz.Models.Enums;
 
 namespace OrcaQuiz.Utils
 {
@@ -27,18 +28,30 @@ namespace OrcaQuiz.Utils
 
             foreach (var question in testQuestions)
             {
-                if (question.QuestionType == Models.Enums.QuestionType.MultipleChoice)
+                switch (question.QuestionType)
                 {
-                    userTestScore += MultipleChoiceCorrectQuestions(question, ts);
+                    case QuestionType.MultipleChoice:
+                        userTestScore += MultipleChoiceCorrectQuestions(question, ts);
+                        break;
+                    case QuestionType.SingleChoice:
+                        userTestScore += SingleChoiceCorrectQuestions(question, ts);
+                        break;
+                    default:
+                        System.Diagnostics.Debug.WriteLine("You have to correct the answers manually, fool!");
+                        break;
                 }
-                else if (question.QuestionType == Models.Enums.QuestionType.SingleChoice)
-                {
-                    userTestScore += SingleChoiceCorrectQuestions(question, ts);
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("You have to correct the answers manually, fool!");
-                }
+                //if (question.QuestionType == Models.Enums.QuestionType.MultipleChoice)
+                //{
+                //    userTestScore += MultipleChoiceCorrectQuestions(question, ts);
+                //}
+                //else if (question.QuestionType == Models.Enums.QuestionType.SingleChoice)
+                //{
+                //    userTestScore += SingleChoiceCorrectQuestions(question, ts);
+                //}
+                //else
+                //{
+                //    System.Diagnostics.Debug.WriteLine("You have to correct the answers manually, fool!");
+                //}
             }
 
 
