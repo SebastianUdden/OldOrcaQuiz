@@ -327,11 +327,14 @@ namespace OrcaQuiz.Repositories
         public ShowResultsVM GetShowResultsVM(int testId)
         {
             var test = context.Tests
+                .Include(t=>t.Questions)
                 .Include(t => t.TestSessions)
+                .ThenInclude(ts=>ts.User)
                 .Single(o => o.Id == testId);
 
             int maxScore = test.Questions.Count();
             double testPassPercentage = (double)test.PassPercentage / 100;
+
             var result = new
             {
                 resultData = new
@@ -439,51 +442,29 @@ namespace OrcaQuiz.Repositories
             var currentTest = context.Tests
                 .Include(t => t.Questions)
                 .Single(o => o.Id == testId);
-            var currentTestSession = new TestSession();
-
-            context.TestSessions.Add(new TestSession
+            var currentTestSession = new TestSession()
             {
                 StartTime = DateTime.UtcNow,
                 SecondsLeft = currentTest.TimeLimitInMinutes * 60,
                 QuestionResults = new List<QuestionResult>(),
                 TestId = currentTest.Id,
                 UserId = currentUser.Id
-            });
+            };
+
+            context.TestSessions.Add(currentTestSession);
             var result = await context.SaveChangesAsync();
-
-            //currentUser.TestSessions.Add(new TestSession()
-            //{
-            //    Id = _testSessions.Count() + 1,
-            //    QuestionResults = new List<QuestionResult>(),
-            //    StartTime = DateTime.UtcNow,
-            //    SecondsLeft = currentTest.TimeLimitInMinutes * 60,
-            //    TestId = testId,
-            //    UserId = userId,
-            //});
-            //if (result > 0)
-            //{
-            //    for (int i = 0; i < currentTest.Questions.Count(); i++)
-            //    {
-            //        context.QuestionResults.Add(new QuestionResult
-            //        {
-            //            QuestionId = currentTest.Questions[i].Id,
-            //            SelectedAnswers = "",
-            //        });
-            //    }
-            //    await context.SaveChangesAsync();
-
-            //}
-            //for (int i = 1; i <= currentTest.Questions.Count(); i++)
-            //    currentUser.TestSessions.Last().QuestionResults.Add(new QuestionResult()
-            //    {
-            //        Id = _questionResults.Count() + i,
-            //        QuestionId = currentTest.Questions.ElementAt(i - 1).Id,
-            //        SelectedAnswers = "",
-            //    });
-
-            //_testSessions.Add(currentUser.TestSessions.Last());
-            currentTestSession = context.TestSessions.OrderBy(ts => ts.Id).Last();
-
+            
+            for (int i = 0; i < currentTest.Questions.Count(); i++)
+            {
+                context.QuestionResults.Add(new QuestionResult
+                {
+                    QuestionId = currentTest.Questions[i].Id,
+                    SelectedAnswers = "",
+                    TestSessionId = currentTestSession.Id
+                });
+            }
+            await context.SaveChangesAsync();
+            
             return currentTestSession.Id;
         }
 

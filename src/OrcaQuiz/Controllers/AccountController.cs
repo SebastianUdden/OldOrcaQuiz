@@ -39,7 +39,7 @@ namespace OrcaQuiz.Controllers
         [Route("Account/Signin")]
         public async Task<IActionResult> SignIn()
         {
-            var autoSignIn = false;
+            var autoSignIn = true;
             if (autoSignIn)
             {
                 await accountRepository.SignIn(new SignInVM { Username = "orca@quiz.com", Password = "P@ssw0rd" });

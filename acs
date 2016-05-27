@@ -1,0 +1,93 @@
+[33mcommit e3c7bc525414524d116b125840277b824923b47c[m
+Merge: a1c01d7 783cdd7
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Fri May 27 12:51:05 2016 +0200
+
+    Eyy!
+
+[33mcommit a1c01d7d139f5bbc53d6142d1f50d3016375e7f8[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Fri May 27 12:50:28 2016 +0200
+
+    Changes?
+
+[33mcommit 783cdd71a4c6e5f0de9e8942795eb45fb1b7a77d[m
+Author: MattiasHagelin <mattias1985@gmail.com>
+Date:   Fri May 27 12:49:29 2016 +0200
+
+    Mer jobb med dbReository
+
+[33mcommit 073d2b6d5c8bd4061eb272654696df2dce366fc0[m
+Merge: 9b4344f 4b66efd
+Author: MattiasHagelin <mattias1985@gmail.com>
+Date:   Fri May 27 01:07:55 2016 +0200
+
+    Tog alla ändringar från local
+
+[33mcommit 9b4344ff79495a5e3b9ca4c426c8322eb4f35582[m
+Author: MattiasHagelin <mattias1985@gmail.com>
+Date:   Fri May 27 01:04:06 2016 +0200
+
+    La till Bak fil för databas
+    Börjat implementera DbRepository
+    Lagt till funktionalitet för inloggning och registrering
+
+[33mcommit 4b66efdbbd3357d9f83d7f7d59eb95794967a05f[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Tue May 24 10:23:19 2016 +0200
+
+    Deleted name from question
+
+[33mcommit be42f4e41bce5ee4a7db45394cfeac0efbdac08b[m
+Author: MattiasHagelin <mattias1985@gmail.com>
+Date:   Mon May 23 17:06:47 2016 +0200
+
+    Konfigurerat Identity
+
+[33mcommit 2b3d96cd3289363558223baeb409b0d0ab9569c9[m
+Author: MattiasHagelin <mattias1985@gmail.com>
+Date:   Mon May 23 16:46:02 2016 +0200
+
+    Konfigurerat EF
+
+[33mcommit c2d8173735659194a43e8c5daea420e6a9cdfd11[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Mon May 23 15:58:36 2016 +0200
+
+    Syncing
+
+[33mcommit 2653a0e5b3e66c8595474c192f980eb6b963ffec[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Mon May 23 15:44:36 2016 +0200
+
+    Fixade PDFstöd för rc2
+
+[33mcommit 4fefcb6dc51b60ad090c4325dbb59bfec6e61e57[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Mon May 23 15:24:14 2016 +0200
+
+    Fixat Tag Helper
+
+[33mcommit 48658bfa4cef1e3c627aaaa306f13680e956789f[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Mon May 23 14:50:40 2016 +0200
+
+    TestPlatform => OrcaQuiz
+
+[33mcommit cfcb718c8cdb6a64911337c27f8d38103f0c2df0[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Mon May 23 14:43:01 2016 +0200
+
+    This is the first change!
+
+[33mcommit c8c4a11ba64c690f429d43ae6b266b772215857b[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Mon May 23 14:28:34 2016 +0200
+
+    Add project files.
+
+[33mcommit 9f870ede13497051f5612b4853223f01c1ed3f74[m
+Author: sebbe_u <sebbe_u@hotmail.com>
+Date:   Mon May 23 14:28:26 2016 +0200
+
+    Add .gitignore and .gitattributes.

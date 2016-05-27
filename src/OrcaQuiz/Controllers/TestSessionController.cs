@@ -36,6 +36,7 @@ namespace OrcaQuiz.Controllers
             var testSessionId = await repository.StartNewSession(User.Identity.Name, testId);
 
             return RedirectToAction(nameof(ViewQuestion), new { testSessionId = testSessionId, questionIndex = 1 });
+
         }
 
         [Route("TestSession/{testSessionId}/{questionIndex}")]
