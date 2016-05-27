@@ -22,12 +22,16 @@ namespace OrcaQuiz.Repositories
         #region Test
         Test[] GetAllTests();
         int CreateTest(Test test);
-        void CopyQuestionToTest(int questionId, int testId);
+        void CopyQuestionToTest(int questionId, int testId, string userName);
+        object GetAllTestsImportData(int currentTestId);
+        object GetCurrentTestImportData(int id);
         void RemoveQuestionFromTest(int questionId, int testId);
         #endregion
 
         #region Question
         Question[] GetAllQuestions();
+
+        void UpdateQuestion(int testId, int questionId, EditQuestionVM viewModel);
         int CreateTestQuestion(int testId);
         EditQuestionVM GetEditQuestionVM(int testId, int questionId);
         QuestionFormVM GetPreviewQuestionPartial(int questionId);
@@ -38,6 +42,7 @@ namespace OrcaQuiz.Repositories
 
         #region Answer
         Answer[] GetAllAnswers();
+        AnswerDetailVM UpdateAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect);
         int CreateAnswer(int questionId);
         int CreateAnswer(int questionId, AnswerDetailVM viewModel);
         void RemoveAnswerFromQuestion(int testId, int questionId, int answerId);
@@ -45,8 +50,8 @@ namespace OrcaQuiz.Repositories
 
         #region TestSession
         bool UpdateSessionAnswers(int testSessionId, int questionIndex, string[] selectedAnswers, string comment);
-        SessionIndexVM GetSessionIndexVM(int testId);
-        int StartNewSession(int userId, int testId);
+        SessionIndexVM GetSessionIndexVM(int testId, string userName);
+        Task<int> StartNewSession(string userName, int testId);
         void SubmitTestSession(int testSessionId);
         TestSession GetTestSessionById(int testSessionId);
         SessionCompletedVM GetSessionCompletedVM(int testSessionId, SessionCompletedReason sessionCompletedReason);

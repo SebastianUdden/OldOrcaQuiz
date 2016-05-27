@@ -1,0 +1,30 @@
+﻿@model RegistrationVM
+@{
+    Layout = "_SmallInputLayout";
+}
+<div class="bgWhite padding20">
+    <h1>Register</h1>
+    <form asp-controller="Account" asp-action="Index">
+        <label asp-for="Email"></label>
+        <br />
+        <input class="form-control input-group-sm" asp-for="Email" placeholder="E-mail"/>
+        <span asp-validation-for="Email"></span>
+        <br />
+        <label asp-for="Password"></label>
+        <br />
+        <input class="form-control input-group-sm" asp-for="Password" placeholder="Password" type="password"/>
+        <span asp-validation-for="Password"></span>
+        <br />
+        <label asp-for="FirstName"></label>
+        <br />
+        <input class="form-control input-group-sm" asp-for="FirstName" placeholder="First name"/>
+        <span asp-validation-for="FirstName"></span>
+        <br />
+        <label asp-for="LastName"></label>
+        <br />
+        <input class="form-control input-group-sm" asp-for="LastName" placeholder="Last name"/>
+        <span asp-validation-for="LastName"></span>
+        <br />
+        <button class="orcaBtn btnWidth120 TopMargin20" type="submit"><span class="fa fa-sign-in rightMargin5"></span>Register</button>
+    </form>
+</div>

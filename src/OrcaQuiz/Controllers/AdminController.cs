@@ -55,11 +55,7 @@ namespace OrcaQuiz.Controllers
         [HttpPost]
         public IActionResult UpdateQuestionSettings(int testId, int questionId, EditQuestionVM viewModel)
         {
-            var thisQuestion = repository.GetAllQuestions().SingleOrDefault(o => o.Id == questionId);
-            thisQuestion.SortOrder = viewModel.SortOrder;
-            thisQuestion.QuestionType = viewModel.Type;
-            thisQuestion.HasComment = viewModel.HasComment;
-            thisQuestion.QuestionText = viewModel.QuestionText;
+            repository.UpdateQuestion(testId, questionId, viewModel);
 
             return RedirectToAction(nameof(UpdateQuestion), new { testId = testId, questionId = questionId });
         }
@@ -82,22 +78,7 @@ namespace OrcaQuiz.Controllers
 
         public PartialViewResult UpdateAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect)
         {
-            var thisAnswer = repository.GetAllAnswers().SingleOrDefault(o => o.Id == answerId);
-            var thisQuestionType = repository.GetAllQuestions().SingleOrDefault(o => o.Id == questionId).QuestionType;
-
-            thisAnswer.AnswerText = answerText;
-            thisAnswer.IsCorrect = isCorrect;
-            thisAnswer.SortOrder = sortOrder;
-
-            var model = new AnswerDetailVM()
-            {
-                AnswerId = answerId,
-                AnswerText = answerText,
-                IsChecked = isCorrect,
-                QuestionType = thisQuestionType,
-                SortOrder = thisAnswer.SortOrder
-            };
-
+            var model = repository.UpdateAnswer(questionId, answerId, answerText, sortOrder, isCorrect);
             return PartialView("_AnswerFormPartial", model);
         }
 
@@ -155,9 +136,9 @@ namespace OrcaQuiz.Controllers
                     CertificateAuthor = model.CertificateAuthor,
                     CertificateCompany = model.CertificateCompany,
                     CertificateCustomText = model.CertificateCustomText,
-                    CertificateTemplatePath = model.CertificateTemplatePath,
-                    EnableCertificateDownloadOnCompletion = model.EnableCertificateDownloadOnCompletion,
-                    EnableEmailCertificateOnCompletion = model.EnableEmailCertificateOnCompletion
+                    CertTemplatePath = model.CertificateTemplatePath,
+                    EnableCertDownloadOnCompletion = model.EnableCertificateDownloadOnCompletion,
+                    EnableEmailCertOnCompletion = model.EnableEmailCertificateOnCompletion
                 })
                 .SingleOrDefault();
 
@@ -183,9 +164,9 @@ namespace OrcaQuiz.Controllers
                 thisTest.CertificateAuthor = viewModel.CertificateAuthor;
                 thisTest.CertificateCompany = viewModel.CertificateCompany;
                 thisTest.CertificateCustomText = viewModel.CertificateCustomText;
-                thisTest.CertificateTemplatePath = viewModel.CertificateTemplatePath;
-                thisTest.EnableCertificateDownloadOnCompletion = viewModel.EnableCertificateDownloadOnCompletion;
-                thisTest.EnableEmailCertificateOnCompletion = viewModel.EnableEmailCertificateOnCompletion;
+                thisTest.CertificateTemplatePath = viewModel.CertTemplatePath;
+                thisTest.EnableCertificateDownloadOnCompletion = viewModel.EnableCertDownloadOnCompletion;
+                thisTest.EnableEmailCertificateOnCompletion = viewModel.EnableEmailCertOnCompletion;
             }
             return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });
         }
@@ -207,7 +188,7 @@ namespace OrcaQuiz.Controllers
             {
                 Name = model.TestName,
                 Description = model.Description,
-                Tags = model.Tags,
+                Tags = User.Identity.Name,
                 ShowPassOrFail = model.ShowPassOrFail,
                 ShowTestScore = model.ShowTestScore,
                 CustomCompletionMessage = model.CustomCompletionMessage,
@@ -217,9 +198,9 @@ namespace OrcaQuiz.Controllers
                 CertificateAuthor = model.CertificateAuthor,
                 CertificateCompany = model.CertificateCompany,
                 CertificateCustomText = model.CertificateCustomText,
-                CertificateTemplatePath = model.CertificateTemplatePath,
-                EnableCertificateDownloadOnCompletion = model.EnableCertificateDownloadOnCompletion,
-                EnableEmailCertificateOnCompletion = model.EnableEmailCertificateOnCompletion
+                CertificateTemplatePath = model.CertTemplatePath,
+                EnableCertificateDownloadOnCompletion = model.EnableCertDownloadOnCompletion,
+                EnableEmailCertificateOnCompletion = model.EnableEmailCertOnCompletion
             });
 
             return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });
@@ -256,9 +237,9 @@ namespace OrcaQuiz.Controllers
         {
             //TODO: multiple questions in one query
             foreach (var qId in questionIds)
-                repository.CopyQuestionToTest(qId, testId);
+                repository.CopyQuestionToTest(qId, testId, User.Identity.Name);
 
-            return Json(GetCurrentTestImportData(testId));
+            return Json(repository.GetCurrentTestImportData(testId));
         }
 
         [HttpPost]
@@ -268,7 +249,7 @@ namespace OrcaQuiz.Controllers
             foreach (var qId in questionIds)
                 repository.RemoveQuestionFromTest(qId, testId);
 
-            return Json(GetCurrentTestImportData(testId));
+            return Json(repository.GetCurrentTestImportData(testId));
         }
 
         public ActionResult PreviewQuestionPartial(int id)
@@ -282,56 +263,56 @@ namespace OrcaQuiz.Controllers
         {
             var viewModel = new
             {
-                allTestsData = GetAllTestsImportData(id),
-                currentTestData = GetCurrentTestImportData(id)
+                allTestsData = repository.GetAllTestsImportData(id),
+                currentTestData = repository.GetCurrentTestImportData(id)
             };
 
             return Json(viewModel);
         }
 
         
-        object GetAllTestsImportData(int currentTestId)
-        {
-            var allTests = repository.GetAllTests();
+        //object GetAllTestsImportData(int currentTestId)
+        //{
+        //    var allTests = repository.GetAllTests();
 
-            var allTestsData = allTests.Where(t => t.Id != currentTestId).Select(o => new
-            {
-                text = o.Name,
-                children = o.Questions.Select(q => new
-                {
-                    id = $"{AppConstants.Import_QuestionIdPrefix}{q.Id}",
-                    text = q.QuestionText.Replace("<iframe", "|FRAME|").Replace("<img", "|IMAGE|").Replace("src", "|SOURCE|"),
-                    children = q.Answers.Select(a => new
-                    {
-                        text = $"{a.AnswerText} {(a.IsCorrect ? " (Correct)" : string.Empty)}",
-                        state = new { disabled = true }
-                    })
-                }),
-            }).ToArray();
+        //    var allTestsData = allTests.Where(t => t.Id != currentTestId).Select(o => new
+        //    {
+        //        text = o.Name,
+        //        children = o.Questions.Select(q => new
+        //        {
+        //            id = $"{AppConstants.Import_QuestionIdPrefix}{q.Id}",
+        //            text = q.QuestionText.Replace("<iframe", "|FRAME|").Replace("<img", "|IMAGE|").Replace("src", "|SOURCE|"),
+        //            children = q.Answers.Select(a => new
+        //            {
+        //                text = $"{a.AnswerText} {(a.IsCorrect ? " (Correct)" : string.Empty)}",
+        //                state = new { disabled = true }
+        //            })
+        //        }),
+        //    }).ToArray();
 
-            return allTestsData;
-        }
+        //    return allTestsData;
+        //}
 
-        object GetCurrentTestImportData(int id)
-        {
-            var allTests = repository.GetAllTests();
+        //object GetCurrentTestImportData(int id)
+        //{
+        //    var allTests = repository.GetAllTests();
 
-            var thisTestData = allTests.Where(o => o.Id == id).Select(o => new
-            {
-                text = o.Name,
-                children = o.Questions.Select(q => new
-                {
-                    id = $"{AppConstants.Import_QuestionIdPrefix}{q.Id}",
-                    text = q.QuestionText.Replace("<iframe", "|FRAME|").Replace("<img", "|IMAGE|").Replace("src", "|SOURCE|"),
-                    children = q.Answers.Select(a => new
-                    {
-                        text = $"{a.AnswerText} {(a.IsCorrect ? " (Correct)" : string.Empty)}",
-                        state = new { disabled = true }
-                    })
-                }),
-            }).Single();
-            return thisTestData;
-        }
+        //    var thisTestData = allTests.Where(o => o.Id == id).Select(o => new
+        //    {
+        //        text = o.Name,
+        //        children = o.Questions.Select(q => new
+        //        {
+        //            id = $"{AppConstants.Import_QuestionIdPrefix}{q.Id}",
+        //            text = q.QuestionText.Replace("<iframe", "|FRAME|").Replace("<img", "|IMAGE|").Replace("src", "|SOURCE|"),
+        //            children = q.Answers.Select(a => new
+        //            {
+        //                text = $"{a.AnswerText} {(a.IsCorrect ? " (Correct)" : string.Empty)}",
+        //                state = new { disabled = true }
+        //            })
+        //        }),
+        //    }).Single();
+        //    return thisTestData;
+        //}
 
        
     }

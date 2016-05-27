@@ -25,16 +25,15 @@ namespace OrcaQuiz.Controllers
         [Route("TestSession/Index/{testId}")]
         public IActionResult Index(int testId)
         {
-            var viewModel = repository.GetSessionIndexVM(testId);
+            var viewModel = repository.GetSessionIndexVM(testId, User.Identity.Name);
             return View(viewModel);
         }
 
         //Comment: review routing design
         [Route("TestSession/StartSession/{testId}")]
-        public IActionResult StartSession(int testId)
+        public async Task<IActionResult> StartSession(int testId)
         {
-            int userId = 1;
-            int testSessionId = repository.StartNewSession(userId, testId);
+            var testSessionId = await repository.StartNewSession(User.Identity.Name, testId);
 
             return RedirectToAction(nameof(ViewQuestion), new { testSessionId = testSessionId, questionIndex = 1 });
         }

@@ -9,6 +9,7 @@ namespace OrcaQuiz.Models
     {
         public int Id { get; set; }
         public int QuestionId { get; set; }
+        public virtual Question Question { get; set; }
         public string AnswerText { get; set; }
         public bool IsCorrect { get; set; }
         public int SortOrder { get; set; }
