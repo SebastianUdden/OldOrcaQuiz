@@ -38,13 +38,13 @@ namespace OrcaQuiz.ViewModels
         public string CustomCompletionMessage { get; set; }
 
         [Display(Name = "Name of certificate PDF template (*.pdf)")]
-        public string CertTemplatePath { get; set; }
+        public string CertificateTemplatePath { get; set; }
 
         [Display(Name = "Enable certificate download")]
-        public bool EnableCertDownloadOnCompletion { get; set; }
+        public bool EnableCertificateDownloadOnCompletion { get; set; }
 
         [Display(Name = "Enable certificate by email")]
-        public bool EnableEmailCertOnCompletion { get; set; }
+        public bool EnableEmailCertificateOnCompletion { get; set; }
 
         [Display(Name = "Company Name")]
         public string CertificateCompany { get; set; }

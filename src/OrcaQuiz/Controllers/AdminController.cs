@@ -155,9 +155,9 @@ namespace OrcaQuiz.Controllers
                     CertificateAuthor = model.CertificateAuthor,
                     CertificateCompany = model.CertificateCompany,
                     CertificateCustomText = model.CertificateCustomText,
-                    CertTemplatePath = model.CertTemplatePath,
-                    EnableCertDownloadOnCompletion = model.EnableCertDownloadOnCompletion,
-                    EnableEmailCertOnCompletion = model.EnableEmailCertOnCompletion
+                    CertificateTemplatePath = model.CertificateTemplatePath,
+                    EnableCertificateDownloadOnCompletion = model.EnableCertificateDownloadOnCompletion,
+                    EnableEmailCertificateOnCompletion = model.EnableEmailCertificateOnCompletion
                 })
                 .SingleOrDefault();
 
@@ -183,9 +183,9 @@ namespace OrcaQuiz.Controllers
                 thisTest.CertificateAuthor = viewModel.CertificateAuthor;
                 thisTest.CertificateCompany = viewModel.CertificateCompany;
                 thisTest.CertificateCustomText = viewModel.CertificateCustomText;
-                thisTest.CertTemplatePath = viewModel.CertTemplatePath;
-                thisTest.EnableCertDownloadOnCompletion = viewModel.EnableCertDownloadOnCompletion;
-                thisTest.EnableEmailCertOnCompletion = viewModel.EnableEmailCertOnCompletion;
+                thisTest.CertificateTemplatePath = viewModel.CertificateTemplatePath;
+                thisTest.EnableCertificateDownloadOnCompletion = viewModel.EnableCertificateDownloadOnCompletion;
+                thisTest.EnableEmailCertificateOnCompletion = viewModel.EnableEmailCertificateOnCompletion;
             }
             return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });
         }
@@ -217,9 +217,9 @@ namespace OrcaQuiz.Controllers
                 CertificateAuthor = model.CertificateAuthor,
                 CertificateCompany = model.CertificateCompany,
                 CertificateCustomText = model.CertificateCustomText,
-                CertTemplatePath = model.CertTemplatePath,
-                EnableCertDownloadOnCompletion = model.EnableCertDownloadOnCompletion,
-                EnableEmailCertOnCompletion = model.EnableEmailCertOnCompletion
+                CertificateTemplatePath = model.CertificateTemplatePath,
+                EnableCertificateDownloadOnCompletion = model.EnableCertificateDownloadOnCompletion,
+                EnableEmailCertificateOnCompletion = model.EnableEmailCertificateOnCompletion
             });
 
             return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });

@@ -508,10 +508,10 @@ namespace OrcaQuiz.Repositories
                 CertificateAuthor = test.CertificateAuthor,
                 CertificateCompany = test.CertificateCompany,
                 CertificateCustomText = test.CertificateCustomText,
-                CertTemplatePath = test.CertTemplatePath,
+                CertificateTemplatePath = test.CertificateTemplatePath,
                 CustomCompletionMessage = test.CustomCompletionMessage,
-                EnableCertDownloadOnCompletion = test.EnableCertDownloadOnCompletion,
-                EnableEmailCertOnCompletion = test.EnableEmailCertOnCompletion,
+                EnableCertificateDownloadOnCompletion = test.EnableCertificateDownloadOnCompletion,
+                EnableEmailCertificateOnCompletion = test.EnableEmailCertificateOnCompletion,
 
                 //Static
                 IsPublished = true,
