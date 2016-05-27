@@ -14,6 +14,8 @@ namespace OrcaQuiz.Repositories
         public DbSet<Test> Tests { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<TestSession> TestSessions { get; set; }
+        public DbSet<QuestionResult> QuestionResults { get; set; }
 
         public OrcaQuizContext(DbContextOptions<OrcaQuizContext> options)
     : base(options)
@@ -29,8 +31,8 @@ namespace OrcaQuiz.Repositories
             modelBuilder.Entity<Test>().ToTable("Tests");
             modelBuilder.Entity<Question>().ToTable("Questions");
             modelBuilder.Entity<Answer>().ToTable("Answers");
-
-
+            modelBuilder.Entity<TestSession>().ToTable("TestSessions");
+            modelBuilder.Entity<QuestionResult>().ToTable("QuestionResults");
         }
     }
 }

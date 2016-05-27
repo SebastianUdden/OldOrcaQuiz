@@ -21,37 +21,40 @@ namespace OrcaQuiz.Controllers
             this.accountRepository = accountRepository;
         }
         // GET: /<controller>/
-        [Route("Admin/Register")]
-        public IActionResult Index()
+        [Route("Account/Register")]
+        public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("Admin/Register")]
-        public IActionResult Index(RegistrationVM model)
+        [Route("Account/Register")]
+        public IActionResult Register(RegistrationVM model)
         { 
             accountRepository.Register(model);
 
             return View();
         }
 
-        [Route("Admin/Signin")]
+        [Route("Account/Signin")]
         public async Task<IActionResult> SignIn()
         {
-            await accountRepository.SignIn(new SignInVM { UserName = "orca@quiz.com", Password = "P@ssw0rd" });
-            return RedirectToAction(nameof(AdminController.Dashboard), "Admin");
+            var autoSignIn = false;
+            if (autoSignIn)
+            {
+                await accountRepository.SignIn(new SignInVM { Username = "orca@quiz.com", Password = "P@ssw0rd" });
+                return RedirectToAction(nameof(AdminController.Dashboard), "Admin");
+            }
+
+            return View();
         }
 
-        [Route("Admin/Signin")]
+        [Route("Account/Signin")]
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInVM model)
         {
-            //if (!ModelState.IsValid)
-            //    return View(model);
-            
-                model.UserName = "orca@quiz.com";
-                model.Password = "P@ssw0rd";
+            if (!ModelState.IsValid)
+                return View(model);
             
             var result = await accountRepository.SignIn(model);
             if (!result.Succeeded)
@@ -61,6 +64,13 @@ namespace OrcaQuiz.Controllers
             }
 
             return RedirectToAction(nameof(AdminController.Dashboard), "Admin");
+        }
+        [Route("Account/Signout")]
+        public IActionResult SignOut()
+        {
+            accountRepository.SignOut();
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+
         }
     }
 }

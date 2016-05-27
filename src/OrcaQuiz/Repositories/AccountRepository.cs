@@ -55,7 +55,12 @@ namespace OrcaQuiz.Repositories
 
         public async Task<SignInResult> SignIn(SignInVM model)
         {
-            return await signInManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: false, lockoutOnFailure: false);
+            return await signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: false, lockoutOnFailure: false);
+        }
+
+        public async void SignOut()
+        {
+            await signInManager.SignOutAsync();
         }
     }
 }

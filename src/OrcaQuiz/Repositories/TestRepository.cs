@@ -628,7 +628,7 @@ namespace OrcaQuiz.Repositories
             };
         }
 
-        public SessionIndexVM GetSessionIndexVM(int testId)
+        public SessionIndexVM GetSessionIndexVM(int testId, string userName)
         {
             var thisTest = _tests.Single(o => o.Id == testId);
             var thisUserId = 1;
@@ -646,9 +646,9 @@ namespace OrcaQuiz.Repositories
             return viewModel;
         }
 
-        public int StartNewSession(int userId, int testId)
+        public async Task<int> StartNewSession(string userName, int testId)
         {
-            var thisUser = _users.Single(o => o.Id == userId);
+            var thisUser = _users.Single(o => o.Id == 1);
             var thisTest = _tests.Single(o => o.Id == testId);
 
             thisUser.TestSessions.Add(new TestSession()
@@ -658,7 +658,7 @@ namespace OrcaQuiz.Repositories
                 StartTime = DateTime.UtcNow,
                 SecondsLeft = thisTest.TimeLimitInMinutes * 60,
                 TestId = testId,
-                UserId = userId,
+                UserId = 1,
             });
 
             for (int i = 1; i <= thisTest.Questions.Count(); i++)

@@ -50,8 +50,8 @@ namespace OrcaQuiz.Repositories
 
         #region TestSession
         bool UpdateSessionAnswers(int testSessionId, int questionIndex, string[] selectedAnswers, string comment);
-        SessionIndexVM GetSessionIndexVM(int testId);
-        int StartNewSession(int userId, int testId);
+        SessionIndexVM GetSessionIndexVM(int testId, string userName);
+        Task<int> StartNewSession(string userName, int testId);
         void SubmitTestSession(int testSessionId);
         TestSession GetTestSessionById(int testSessionId);
         SessionCompletedVM GetSessionCompletedVM(int testSessionId, SessionCompletedReason sessionCompletedReason);

@@ -1,12 +1,18 @@
 ﻿@model SignInVM
+@{
+    Layout = "_SmallInputLayout";
+}
+<div class="bgWhite padding20">
+    <h1>Sign in</h1>
 <form asp-controller="Account", asp-action="SignIn">
-    <label asp-for="UserName"></label>
-    <input asp-for="UserName" />
-    <span asp-validation-for="UserName"></span>
+    <label asp-for="Username"></label>
+    <input class="form-control input-group-sm" asp-for="Username" placeholder="Username"/>
+    <span asp-validation-for="Username"></span>
     <br />
     <label asp-for="Password"></label>
-    <input asp-for="Password" />
+    <input class="form-control input-group-sm" asp-for="Password" placeholder="Password" type="password" />
     <span asp-validation-for="Password"></span>
     <br />
-    <input type="submit" value="Sing in" />
+    <button class="orcaBtn btnWidth120 TopMargin20" type="submit"><span class="fa fa-sign-in rightMargin5"></span>Sign in</button>
 </form>
+</div>

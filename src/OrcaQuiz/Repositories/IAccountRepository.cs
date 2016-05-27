@@ -11,5 +11,7 @@ namespace OrcaQuiz.Repositories
     {
         void Register(RegistrationVM model);
         Task<SignInResult> SignIn(SignInVM model);
+
+        void SignOut();
     }
 }

@@ -9,6 +9,7 @@ using OrcaQuiz.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace OrcaQuiz.Repositories
 {
@@ -24,10 +25,14 @@ namespace OrcaQuiz.Repositories
         }
         public void CopyQuestionToTest(int questionId, int testId, string userName)
         {
-            var test = context.Tests.Single(o => o.Id == testId);
+            //var test = context.Tests.Single(o => o.Id == testId);
             var question = context.Questions
                 .Include(o => o.Answers)
                 .Single(o => o.Id == questionId);
+
+            //var user = context.Users.Single(o => o.UserId == identityContext.Users
+            //    .Single(iu => iu.UserName == userName).Id);
+
             var currentUser = identityContext.Users.Single(o => o.UserName == userName);
             var user = context.Users.Single(o => o.UserId == currentUser.Id);
 
@@ -142,7 +147,7 @@ namespace OrcaQuiz.Repositories
         {
             var allTests = context.Tests
                 .Include(t => t.Questions)
-                .ThenInclude(q=>q.Answers)
+                .ThenInclude(q => q.Answers)
                 .Where(o => o.Id != currentTestId)
                 .ToArray();
 
@@ -171,9 +176,9 @@ namespace OrcaQuiz.Repositories
         public object GetCurrentTestImportData(int id)
         {
             var currentTest = context.Tests
-                .Include(t=>t.Questions)
-                .ThenInclude(q=>q.Answers)
-                .Single(o=>o.Id == id);
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Answers)
+                .Single(o => o.Id == id);
 
             var currentTestData = new
             {
@@ -271,7 +276,26 @@ namespace OrcaQuiz.Repositories
 
         public QuestionFormVM GetPreviewQuestionPartial(int questionId)
         {
-            throw new NotImplementedException();
+            var currentQuestion = context.Questions
+                .Include(q => q.Answers)
+                .Single(o => o.Id == questionId);
+
+            var viewModel = new QuestionFormVM()
+            {
+                IsInTestSession = false,
+                Answers = currentQuestion.Answers.Select(o => new AnswerDetailVM()
+                {
+                    AnswerId = o.Id,
+                    AnswerText = o.AnswerText,
+                    ShowAsCorrect = o.IsCorrect,
+                    IsChecked = o.IsCorrect
+                }).ToList(),
+                QuestionText = currentQuestion.QuestionText,
+                HasComment = currentQuestion.HasComment,
+                QuestionType = currentQuestion.QuestionType
+            };
+
+            return viewModel;
         }
 
         public SessionCompletedVM GetSessionCompletedVM(int testSessionId, SessionCompletedReason sessionCompletedReason)
@@ -279,14 +303,55 @@ namespace OrcaQuiz.Repositories
             throw new NotImplementedException();
         }
 
-        public SessionIndexVM GetSessionIndexVM(int testId)
+        public SessionIndexVM GetSessionIndexVM(int testId, string userName)
         {
-            throw new NotImplementedException();
+            var currentTest = context.Tests
+                .Include(t => t.Questions)
+                .Single(o => o.Id == testId);
+
+            var user = GetUser(userName);
+
+            var viewModel = new SessionIndexVM()
+            {
+                UserId = user.Id,
+                TestId = currentTest.Id,
+                NumberOfQuestions = currentTest.Questions.Count(),
+                TestDescription = currentTest.Description,
+                TestName = currentTest.Name,
+                TimeLimit = currentTest.TimeLimitInMinutes
+            };
+
+            return viewModel;
         }
 
         public ShowResultsVM GetShowResultsVM(int testId)
         {
-            throw new NotImplementedException();
+            var test = context.Tests
+                .Include(t => t.TestSessions)
+                .Single(o => o.Id == testId);
+
+            int maxScore = test.Questions.Count();
+            double testPassPercentage = (double)test.PassPercentage / 100;
+            var result = new
+            {
+                resultData = new
+                {
+                    maxScore = maxScore,
+                    passPercentage = test.PassPercentage,
+                    passResult = maxScore * testPassPercentage
+                },
+                students = test.TestSessions
+                .Select(ts => new
+                {
+                    name = ts.User.FirstName + " " + ts.User.Lastname,
+                    email = ts.User.Email,
+                    testscore = TestSessionUtils.GetScore(ts, context.Answers.ToArray(), context.Questions.ToArray())
+                }).ToArray()
+            };
+            return new ShowResultsVM
+            {
+                ResultDataJSON = JsonConvert.SerializeObject(result)
+            };
         }
 
         public TestSession GetTestSessionById(int testSessionId)
@@ -296,7 +361,47 @@ namespace OrcaQuiz.Repositories
 
         public ViewQuestionVM GetViewQuestion(int testSessionId, int questionIndex, bool isInSession)
         {
-            throw new NotImplementedException();
+            var currentTestSession = context.TestSessions
+                .Include(ts => ts.QuestionResults)
+                .Single(o => o.Id == testSessionId);
+            var currentTest = context.Tests
+                .Include(t => t.Questions)
+                .Single(o => o.Id == currentTestSession.TestId);
+            var currentQuestion = currentTest.Questions.OrderBy(o => o.SortOrder).ElementAt(questionIndex - 1);
+            var currentQuestionResult = currentTestSession.QuestionResults.SingleOrDefault(o => o.QuestionId == currentQuestion.Id);
+
+            //var timeLeft = thisTest.TimeLimit - (DateTime.UtcNow - thisTestSession.StartTime);
+
+            //var secondsLeft = TimeUtils.GetSecondsLeft(thisTest.TimeLimitInMinutes, thisTestSession.StartTime);
+            var selectedAnswers = currentQuestionResult?.SelectedAnswers.Split(',');
+
+            return new ViewQuestionVM()
+            {
+                TestId = currentTest.Id,
+                TestTitle = currentTest.Name,
+                NumOfQuestion = currentTest.Questions.Count(),
+                QuestionIndex = questionIndex,
+                SecondsLeft = currentTestSession.SecondsLeft,
+
+                QuestionFormVM = new QuestionFormVM()
+                {
+                    IsInTestSession = isInSession,
+                    QuestionType = currentQuestion.QuestionType,
+                    QuestionText = currentQuestion.QuestionText,
+                    HasComment = currentQuestion.HasComment,
+                    Comment = currentQuestionResult?.Comment,
+                    SelectedAnswers = selectedAnswers,
+                    Answers = currentQuestion.Answers.Select(o => new AnswerDetailVM()
+                    {
+                        AnswerId = o.Id,
+                        AnswerText = o.AnswerText,
+                        ShowAsCorrect = ((!isInSession) && (o.IsCorrect)),
+                        IsChecked = selectedAnswers == null ? false :
+                            ((isInSession) && (selectedAnswers.Contains(o.Id.ToString()))),
+
+                    }).ToList()
+                }
+            };
         }
 
         public void RemoveAnswerFromQuestion(int testId, int questionId, int answerId)
@@ -328,9 +433,58 @@ namespace OrcaQuiz.Repositories
             throw new NotImplementedException();
         }
 
-        public int StartNewSession(int userId, int testId)
+        public async Task<int> StartNewSession(string userName, int testId)
         {
-            throw new NotImplementedException();
+            var currentUser = GetUser(userName);
+            var currentTest = context.Tests
+                .Include(t => t.Questions)
+                .Single(o => o.Id == testId);
+            var currentTestSession = new TestSession();
+
+            context.TestSessions.Add(new TestSession
+            {
+                StartTime = DateTime.UtcNow,
+                SecondsLeft = currentTest.TimeLimitInMinutes * 60,
+                QuestionResults = new List<QuestionResult>(),
+                TestId = currentTest.Id,
+                UserId = currentUser.Id
+            });
+            var result = await context.SaveChangesAsync();
+
+            //currentUser.TestSessions.Add(new TestSession()
+            //{
+            //    Id = _testSessions.Count() + 1,
+            //    QuestionResults = new List<QuestionResult>(),
+            //    StartTime = DateTime.UtcNow,
+            //    SecondsLeft = currentTest.TimeLimitInMinutes * 60,
+            //    TestId = testId,
+            //    UserId = userId,
+            //});
+            //if (result > 0)
+            //{
+            //    for (int i = 0; i < currentTest.Questions.Count(); i++)
+            //    {
+            //        context.QuestionResults.Add(new QuestionResult
+            //        {
+            //            QuestionId = currentTest.Questions[i].Id,
+            //            SelectedAnswers = "",
+            //        });
+            //    }
+            //    await context.SaveChangesAsync();
+
+            //}
+            //for (int i = 1; i <= currentTest.Questions.Count(); i++)
+            //    currentUser.TestSessions.Last().QuestionResults.Add(new QuestionResult()
+            //    {
+            //        Id = _questionResults.Count() + i,
+            //        QuestionId = currentTest.Questions.ElementAt(i - 1).Id,
+            //        SelectedAnswers = "",
+            //    });
+
+            //_testSessions.Add(currentUser.TestSessions.Last());
+            currentTestSession = context.TestSessions.OrderBy(ts => ts.Id).Last();
+
+            return currentTestSession.Id;
         }
 
         public void SubmitTestSession(int testSessionId)
@@ -373,6 +527,15 @@ namespace OrcaQuiz.Repositories
         public bool UpdateSessionAnswers(int testSessionId, int questionIndex, string[] selectedAnswers, string comment)
         {
             throw new NotImplementedException();
+        }
+
+        private User GetUser(string userName)
+        {
+            var currentUser = identityContext.Users.Single(o => o.UserName == userName);
+            return context.Users
+                //.Include(u=>u.TestSessions)
+                //.ThenInclude(ts=>ts.QuestionResults)
+                .Single(o => o.UserId == currentUser.Id);
         }
     }
 }

@@ -58,12 +58,20 @@
             </div>
             <div class="collapse navbar-collapse" id="main-menu">
                 <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.Name?.Length > 0)
+                    {
                     <li><a href="~/Admin/Modules">Modules</a></li>
                     <li><a href="~/Admin/Dashboard">Dashboard</a></li>
-                    <li><a href="~/TestSession/Index/1">Testsession</a></li>
+                    <li><a href="~/TestSession/Index/2">Testsession</a></li>
                     @*<li><a href="~/User/SelectTest">Take a test</a></li>
-                        <li><a href="~/Admin/index">Manage tests</a></li>*@
-                    <li><a href="~/Home/Login">Log in</a></li>
+                    <li><a href="~/Admin/index">Manage tests</a></li>*@
+                    <li><a href="~/Account/Settings">@User.Identity.Name</a></li>
+                    <li><a href="~/Admin/Signout">Sign out</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/Admin/Signin">Sign in</a></li>
+                    }
                 </ul>
             </div>
         </div>
