@@ -24,7 +24,7 @@ namespace OrcaQuiz.Utils
             // Facit-del
             #region Facit
             // Tar ut alla frågor relaterade till testet
-            var testQuestions = _questions.Where(o => o.TestId == ts.TestId).ToList();
+            var testQuestions = ts.Test.Questions;
 
             foreach (var question in testQuestions)
             {

@@ -300,7 +300,30 @@ namespace OrcaQuiz.Repositories
 
         public SessionCompletedVM GetSessionCompletedVM(int testSessionId, SessionCompletedReason sessionCompletedReason)
         {
-            throw new NotImplementedException();
+            var testSession = context.TestSessions
+                .Include(ts => ts.Test)
+                    .ThenInclude(t => t.Questions)
+                        .ThenInclude(q => q.Answers)
+                .Include(ts => ts.User)
+                .Single(ts => ts.Id == testSessionId);
+
+
+            //var user = _users.Single(u => _testSessions.Single(o => o.Id == testSessionId).UserId == u.Id);
+            //var testSession = _testSessions.Single(o => o.Id == testSessionId);
+            //var test = _tests.Single(o => o.Id == testSession.TestId);
+            var questionsAndAnswers = new QuestionsAndAnswersUtils()
+            {
+                Questions = context.Questions.ToArray(),
+                Answers = context.Answers.ToArray()
+            };
+            return new SessionCompletedVM()
+            {
+                TestSessionId = testSessionId,
+                Date = DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                IsSuccessful = GradeUtils.CheckHasPassed(testSession, testSession.Test.PassPercentage, questionsAndAnswers),
+                UserName = $"{testSession.User.FirstName} {testSession.User.Lastname}",
+                SessionCompletedReason = sessionCompletedReason
+            };
         }
 
         public SessionIndexVM GetSessionIndexVM(int testId, string userName)
@@ -327,9 +350,9 @@ namespace OrcaQuiz.Repositories
         public ShowResultsVM GetShowResultsVM(int testId)
         {
             var test = context.Tests
-                .Include(t=>t.Questions)
+                .Include(t => t.Questions)
                 .Include(t => t.TestSessions)
-                .ThenInclude(ts=>ts.User)
+                .ThenInclude(ts => ts.User)
                 .Single(o => o.Id == testId);
 
             int maxScore = test.Questions.Count();
@@ -359,7 +382,7 @@ namespace OrcaQuiz.Repositories
 
         public TestSession GetTestSessionById(int testSessionId)
         {
-            throw new NotImplementedException();
+            return context.TestSessions.Single(ts => ts.Id == testSessionId);
         }
 
         public ViewQuestionVM GetViewQuestion(int testSessionId, int questionIndex, bool isInSession)
@@ -369,6 +392,7 @@ namespace OrcaQuiz.Repositories
                 .Single(o => o.Id == testSessionId);
             var currentTest = context.Tests
                 .Include(t => t.Questions)
+                .ThenInclude(q => q.Answers)
                 .Single(o => o.Id == currentTestSession.TestId);
             var currentQuestion = currentTest.Questions.OrderBy(o => o.SortOrder).ElementAt(questionIndex - 1);
             var currentQuestionResult = currentTestSession.QuestionResults.SingleOrDefault(o => o.QuestionId == currentQuestion.Id);
@@ -446,14 +470,13 @@ namespace OrcaQuiz.Repositories
             {
                 StartTime = DateTime.UtcNow,
                 SecondsLeft = currentTest.TimeLimitInMinutes * 60,
-                QuestionResults = new List<QuestionResult>(),
                 TestId = currentTest.Id,
                 UserId = currentUser.Id
             };
 
             context.TestSessions.Add(currentTestSession);
             var result = await context.SaveChangesAsync();
-            
+
             for (int i = 0; i < currentTest.Questions.Count(); i++)
             {
                 context.QuestionResults.Add(new QuestionResult
@@ -464,13 +487,15 @@ namespace OrcaQuiz.Repositories
                 });
             }
             await context.SaveChangesAsync();
-            
+
             return currentTestSession.Id;
         }
 
         public void SubmitTestSession(int testSessionId)
         {
-            throw new NotImplementedException();
+            var currentSession = context.TestSessions.Single(o => o.Id == testSessionId);
+            currentSession.SubmitTime = DateTime.UtcNow;
+            context.SaveChanges();
         }
 
         public AnswerDetailVM UpdateAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect)
@@ -507,7 +532,66 @@ namespace OrcaQuiz.Repositories
 
         public bool UpdateSessionAnswers(int testSessionId, int questionIndex, string[] selectedAnswers, string comment)
         {
-            throw new NotImplementedException();
+            var currentTestSession = context.TestSessions
+                .Include(ts => ts.Test)
+                    .ThenInclude(t => t.Questions)
+                .Include(ts => ts.QuestionResults)
+                .Single(ts => ts.Id == testSessionId);
+
+            var currentQuestion = currentTestSession.Test
+                .Questions.OrderBy(q => q.SortOrder).ElementAt(questionIndex - 1);
+
+            var currentQuestionResult = context.QuestionResults.Single(qr => qr.QuestionId == currentQuestion.Id && qr.TestSessionId == testSessionId);
+
+            //var thisTestSession = _testSessions.Single(o => o.Id == testSessionId);
+            //var thisTest = _tests.Single(o => o.Id == thisTestSession.TestId);
+            //var thisQuestion = thisTest.Questions.ElementAt(questionIndex - 1);
+            //var thisQuestionResult = thisTestSession.QuestionResults.Find(o => o.QuestionId == thisQuestion.Id);
+
+            var hasTimeLeft = TimeUtils.HasTimeLeft(currentTestSession.Test.TimeLimitInMinutes, currentTestSession.StartTime);
+
+            if (hasTimeLeft)
+            {
+                if (currentQuestionResult == null)
+                {
+                    var newQuestionResult = new QuestionResult()
+                    {
+                        QuestionId = currentQuestion.Id,
+                        TestSessionId = currentTestSession.Id,
+                    };
+                    context.QuestionResults.Add(newQuestionResult);
+                    context.SaveChanges();
+
+                    //currentTestSession.QuestionResults.Add(new QuestionResult()
+                    //{
+                    //    QuestionId = thisQuestion.Id,
+                    //});
+                    //_questionResults.Add(thisTestSession.QuestionResults.Last());
+                    //thisQuestionResult = thisTestSession.QuestionResults.Last();
+                    currentQuestionResult = newQuestionResult;
+                }
+
+                currentQuestionResult.SelectedAnswers = "";
+
+                if (selectedAnswers != null)
+                {
+                    for (int i = 0; i < selectedAnswers.Length; i++)
+                    {
+                        if (i == selectedAnswers.Length - 1)
+                            currentQuestionResult.SelectedAnswers += selectedAnswers[i];
+                        else
+                            currentQuestionResult.SelectedAnswers += selectedAnswers[i] + ",";
+                    }
+                    //foreach (var answer in selectedAnswers)
+                    //    currentQuestionResult.SelectedAnswers += answer + ",";
+                    //currentQuestionResult.SelectedAnswers = thisQuestionResult.SelectedAnswers.Substring(0, thisQuestionResult.SelectedAnswers.Length - 1);
+                }
+                if (!string.IsNullOrWhiteSpace(comment))
+                    currentQuestionResult.Comment = comment;
+            }
+            context.SaveChanges();
+
+            return (hasTimeLeft);
         }
 
         private User GetUser(string userName)
