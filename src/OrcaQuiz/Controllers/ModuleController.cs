@@ -25,13 +25,7 @@ namespace OrcaQuiz.Controllers
         [HttpPost]
         public IActionResult CreateModule(ModuleVM model)
         {
-            repository.GetAllModules().Add(new Module
-            {
-                Id = 10,
-                Name = model.Name,
-                Description = model.Description,
-                Tags = model.Tags
-            });
+            repository.CreateNewModule(model);
             return RedirectToAction("Modules");
         }
 
@@ -39,14 +33,7 @@ namespace OrcaQuiz.Controllers
         public IActionResult EditModule(int Id)
         {
             //var modules = repository.GetModules();
-            var module = repository.GetModuleById(Id);
-            var model = new ModuleVM
-            {
-                Name = module.Name,
-                Description = module.Description,
-                Tags = module.Tags,
-                Tests = module.Tests
-            };
+            var model = repository.GetModuleVMByModuleId(Id);
 
             return View(model);
         }
@@ -55,27 +42,15 @@ namespace OrcaQuiz.Controllers
         [Route("Admin/EditModule/{Id}")]
         public IActionResult EditModule(ModuleVM model)
         {
-            var module = repository.GetModuleById(model.Id);
-            module.Name = model.Name;
-            module.Description = model.Description;
-            module.Tags = model.Tags;
-
+            repository.UpdateModule(model);
             return RedirectToAction("Modules");
             //return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });
         }
         [Route("Admin/Modules")]
         public IActionResult Modules()
         {
-            var model = repository.GetAllModules()
-                .Select(o => new ModuleVM
-                {
-                    Name = o.Name,
-                    Description = o.Description,
-                    Tags = o.Tags,
-                    Tests = o.Tests,
-                    Id = o.Id
-                })
-                .ToArray();
+            var model = repository.GetAllModules();
+                
             return View(model);
         }
 

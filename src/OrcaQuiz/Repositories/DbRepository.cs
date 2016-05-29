@@ -128,9 +128,16 @@ namespace OrcaQuiz.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Module> GetAllModules()
+        public void CreateNewModule(ModuleVM model)
         {
-            return context.Modules.OrderBy(o => o.Name).ToList();
+            context.Modules.Add(new Module()
+            {
+                Description = model.Description,
+                Name = model.Name,
+                Tags = model.Tags
+                //,Tests = model.Tests
+            });
+            context.SaveChanges();
         }
 
         public Question[] GetAllQuestions()
@@ -170,7 +177,20 @@ namespace OrcaQuiz.Repositories
 
         public PdfSymbols GetCertificateSymbols(int testSessionId)
         {
-            throw new NotImplementedException();
+            var testSession = context.TestSessions
+                .Include(ts => ts.Test)
+                .Include(ts => ts.User)
+                .SingleOrDefault(ts => ts.Id == testSessionId);
+            
+            return new PdfSymbols
+            {
+                Author = testSession.Test.CertificateAuthor,
+                Company = testSession.Test.CertificateCompany,
+                CertificateName = testSession.Test.Name,
+                Date = testSession.StartTime.ToString("yyyy-MM-dd"),
+                Details = testSession.Test.CertificateCustomText,
+                StudentName = $"{testSession.User.FirstName} {testSession.User.Lastname}"
+            };
         }
 
         public object GetCurrentTestImportData(int id)
@@ -199,7 +219,9 @@ namespace OrcaQuiz.Repositories
 
         public EditQuestionVM GetEditQuestionVM(int testId, int questionId)
         {
-            var thisQuestion = context.Questions.SingleOrDefault(o => o.Id == questionId);
+            var thisQuestion = context.Questions
+                .Include(q=>q.Answers)
+                .SingleOrDefault(o => o.Id == questionId);
             var testQuestions = context.Questions.Where(o => o.TestId == testId).ToArray();
 
             var viewModel = new EditQuestionVM()
@@ -246,7 +268,17 @@ namespace OrcaQuiz.Repositories
 
         public ManageModuleTestsVM GetManageModuleTestVM(int moduleId)
         {
-            throw new NotImplementedException();
+            return context.Modules
+                .Include(m => m.Tests)
+                .Where(m=>m.Id == moduleId)
+                .Select(m => new ManageModuleTestsVM()
+                {
+                    ModuleId = m.Id,
+                    Description = m.Description,
+                    ModuleName = m.Name,
+                    Tests = m.Tests
+                })
+                .Single();
         }
 
         public ManageTestQuestionsVM GetManageTestQuestionVM(int testId)
@@ -264,9 +296,21 @@ namespace OrcaQuiz.Repositories
             };
         }
 
-        public Module GetModuleById(int Id)
+        public ModuleVM GetModuleVMByModuleId(int moduleId)
         {
-            throw new NotImplementedException();
+            return context.Modules
+                .Include(m=>m.Tests)
+                .Where(m=>m.Id == moduleId)
+                .Select(m=> new ModuleVM()
+                {
+                    Id = m.Id,
+                    Description = m.Description,
+                    Name = m.Name,
+                    Tags = m.Tags,
+                    Tests = m.Tests
+                })
+                .Single();
+
         }
 
         public QuestionFormVM GetPreviewQuestion(int questionId)
@@ -352,7 +396,9 @@ namespace OrcaQuiz.Repositories
             var test = context.Tests
                 .Include(t => t.Questions)
                 .Include(t => t.TestSessions)
-                .ThenInclude(ts => ts.User)
+                    .ThenInclude(ts => ts.QuestionResults)
+                .Include(t => t.TestSessions)
+                    .ThenInclude(ts => ts.User)
                 .Single(o => o.Id == testId);
 
             int maxScore = test.Questions.Count();
@@ -520,6 +566,15 @@ namespace OrcaQuiz.Repositories
             return model;
         }
 
+        public void UpdateModule(ModuleVM model)
+        {
+            var module = context.Modules.Single(m => m.Id == model.Id);
+            module.Name = model.Name;
+            module.Description = model.Description;
+            module.Tags = model.Tags;
+            context.SaveChanges();
+        }
+
         public void UpdateQuestion(int testId, int questionId, EditQuestionVM viewModel)
         {
             var question = context.Questions.SingleOrDefault(o => o.Id == questionId);
@@ -601,6 +656,20 @@ namespace OrcaQuiz.Repositories
                 //.Include(u=>u.TestSessions)
                 //.ThenInclude(ts=>ts.QuestionResults)
                 .Single(o => o.UserId == currentUser.Id);
+        }
+
+        public ModuleVM[] GetAllModules()
+        {
+            return context.Modules
+                .Select(o => new ModuleVM
+                {
+                    Name = o.Name,
+                    Description = o.Description,
+                    Tags = o.Tags,
+                    Tests = o.Tests,
+                    Id = o.Id
+                })
+                .ToArray();
         }
     }
 }

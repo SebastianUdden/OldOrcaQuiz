@@ -22,14 +22,28 @@ namespace OrcaQuiz.Repositories
         public List<QuestionResult> _questionResults { get; set; }
 
 
-        public List<Module> GetAllModules ()
+        public void CreateNewModule (ModuleVM model)
         {
-            return _modules;
+            _modules.Add(new Module()
+            {
+
+            });
         }
 
-        public Module GetModuleById(int Id)
+        public ModuleVM GetModuleVMByModuleId(int moduleId)
         {
-            return _modules.Single(o => o.Id == Id);
+            return _modules
+                .Where(m => m.Id == moduleId)
+                .Select(m => new ModuleVM()
+                {
+                    Id = m.Id,
+                    Description = m.Description,
+                    Name = m.Name,
+                    Tags = m.Tags,
+                    Tests = m.Tests
+                })
+                .Single();
+
         }
 
         //public Test[] GetAllTests()
@@ -973,6 +987,16 @@ namespace OrcaQuiz.Repositories
         }
 
         public object GetCurrentTestImportData(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateModule(ModuleVM model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ModuleVM[] GetAllModules()
         {
             throw new NotImplementedException();
         }

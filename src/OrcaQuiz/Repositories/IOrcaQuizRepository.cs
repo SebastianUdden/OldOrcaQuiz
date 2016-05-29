@@ -12,9 +12,11 @@ namespace OrcaQuiz.Repositories
     public interface IOrcaQuizRepository
     {
         #region Module
-        List<Module> GetAllModules();
+        void CreateNewModule(ModuleVM model);
         ManageModuleTestsVM GetManageModuleTestVM(int moduleId);
-        Module GetModuleById(int Id);
+        ModuleVM[] GetAllModules();
+        ModuleVM GetModuleVMByModuleId(int moduleId);
+        void UpdateModule(ModuleVM model);
         void CopyTestToModule(int testId, int moduleId);
         void RemoveTestFromModule(int testId, int moduleId);
         #endregion
