@@ -31,6 +31,9 @@ namespace OrcaQuiz.Controllers
         [Route("Account/Register")]
         public async Task<IActionResult> Register(RegistrationVM model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
+
             var result = await accountRepository.Register(model);
             if (result.Succeeded)
             {
@@ -46,7 +49,9 @@ namespace OrcaQuiz.Controllers
         [Route("Account/Signin")]
         public async Task<IActionResult> SignIn()
         {
-            var autoSignIn = true;
+            // Ändra för development/user
+            var autoSignIn = false;
+
             if (autoSignIn)
             {
                 await accountRepository.SignIn(new SignInVM { Username = "orca@quiz.com", Password = "P@ssw0rd" });
@@ -54,6 +59,7 @@ namespace OrcaQuiz.Controllers
             }
 
             return View();
+
         }
 
         [Route("Account/Signin")]
@@ -66,12 +72,13 @@ namespace OrcaQuiz.Controllers
             var result = await accountRepository.SignIn(model);
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("UserName", "User name or password was wrong");
+                ModelState.AddModelError(String.Empty, "User name or password was wrong");
                 return View(model);
             }
 
             return RedirectToAction(nameof(AdminController.Dashboard), "Admin");
         }
+
         [Route("Account/Signout")]
         public IActionResult SignOut()
         {

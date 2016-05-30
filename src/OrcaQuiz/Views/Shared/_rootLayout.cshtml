@@ -66,11 +66,11 @@
                     @*<li><a href="~/User/SelectTest">Take a test</a></li>
                     <li><a href="~/Admin/index">Manage tests</a></li>*@
                     <li><a href="~/Account/Settings">@User.Identity.Name</a></li>
-                    <li><a href="~/Admin/Signout">Sign out</a></li>
+                    <li><a asp-controller="Account" asp-action="SignOut" >Sign out</a></li>
                     }
                     else
                     {
-                        <li><a href="~/Admin/Signin">Sign in</a></li>
+                        <li><a asp-controller="Account" asp-action="SignIn">Sign in</a></li>
                     }
                 </ul>
             </div>
