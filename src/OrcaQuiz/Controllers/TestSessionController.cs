@@ -78,8 +78,8 @@ namespace OrcaQuiz.Controllers
 
             if (hasTimeLeft)
             {
-                var session = repository.GetTestSessionById(testSessionId);
-                session.SecondsLeft = secondsLeft;
+                //var session = repository.GetTestSessionById(testSessionId);
+                //session.SecondsLeft = secondsLeft;
 
                 return RedirectToAction(nameof(ViewQuestion),
                     new { TestSessionId = testSessionId, QuestionIndex = questionIndex });

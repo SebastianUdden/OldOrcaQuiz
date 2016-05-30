@@ -70,6 +70,18 @@ namespace OrcaQuiz.Repositories
             context.SaveChanges();
 
         }
+        public DashboardVM GetDashboardVM()
+        {
+            return new DashboardVM
+            {
+                Tests = context.Tests.Select(o => new DashboardTestItemVM
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    Description = o.Description
+                }).ToList()
+            };
+        }
 
         public void CopyTestToModule(int testId, int moduleId)
         {
@@ -99,14 +111,14 @@ namespace OrcaQuiz.Repositories
             throw new NotImplementedException();
         }
 
-        public int CreateTest(Test test)
-        {
-            test.AuthorId = context.Users.Single(o => o.Email == test.Tags).Id;
-            context.Add(test);
-            context.SaveChanges();
+        //public int CreateTest(Test test)
+        //{
+        //    test.AuthorId = context.Users.Single(o => o.Email == test.Tags).Id;
+        //    context.Add(test);
+        //    context.SaveChanges();
 
-            return context.Tests.Last().Id;
-        }
+        //    return context.Tests.Last().Id;
+        //}
 
         public int CreateTestQuestion(int testId)
         {
@@ -123,11 +135,6 @@ namespace OrcaQuiz.Repositories
             return newQuestion.Id;
         }
 
-        public Answer[] GetAllAnswers()
-        {
-            throw new NotImplementedException();
-        }
-
         public void CreateNewModule(ModuleVM model)
         {
             context.Modules.Add(new Module()
@@ -138,16 +145,6 @@ namespace OrcaQuiz.Repositories
                 //,Tests = model.Tests
             });
             context.SaveChanges();
-        }
-
-        public Question[] GetAllQuestions()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Test[] GetAllTests()
-        {
-            return context.Tests.ToArray();
         }
 
         public object GetAllTestsImportData(int currentTestId)
@@ -454,7 +451,6 @@ namespace OrcaQuiz.Repositories
                 TestTitle = currentTest.Name,
                 NumOfQuestion = currentTest.Questions.Count(),
                 QuestionIndex = questionIndex,
-                SecondsLeft = currentTestSession.SecondsLeft,
 
                 QuestionFormVM = new QuestionFormVM()
                 {
@@ -515,7 +511,6 @@ namespace OrcaQuiz.Repositories
             var currentTestSession = new TestSession()
             {
                 StartTime = DateTime.UtcNow,
-                SecondsLeft = currentTest.TimeLimitInMinutes * 60,
                 TestId = currentTest.Id,
                 UserId = currentUser.Id
             };
@@ -670,6 +665,78 @@ namespace OrcaQuiz.Repositories
                     Id = o.Id
                 })
                 .ToArray();
+        }
+
+        public TestSettingsFormVM GetTestSettingsFormVM(int testId)
+        {
+            return context.Tests.Where(o => o.Id == testId)
+                .Select(model => new TestSettingsFormVM
+                {
+                    TestName = model.Name,
+                    Description = model.Description,
+                    Tags = model.Tags,
+                    ShowPassOrFail = model.ShowPassOrFail,
+                    ShowTestScore = model.ShowTestScore,
+                    CustomCompletionMessage = model.CustomCompletionMessage,
+                    TimeLimitInMinutes = model.TimeLimitInMinutes,
+                    PassPercentage = model.PassPercentage,
+                    NumberOfFeaturedQuestions = model.NumberOfFeaturedQuestions,
+                    CertificateAuthor = model.CertificateAuthor,
+                    CertificateCompany = model.CertificateCompany,
+                    CertificateCustomText = model.CertificateCustomText,
+                    CertificateTemplatePath = model.CertificateTemplatePath,
+                    EnableCertificateDownloadOnCompletion = model.EnableCertificateDownloadOnCompletion,
+                    EnableEmailCertificateOnCompletion = model.EnableEmailCertificateOnCompletion
+                })
+                .SingleOrDefault();
+        }
+
+        public void UpdateTestSettings(TestSettingsFormVM viewModel, int testId)
+        {
+            var thisTest = context.Tests.SingleOrDefault(o => o.Id == testId);
+            thisTest.Description = viewModel.Description;
+            thisTest.Name = viewModel.TestName;
+            thisTest.Tags = viewModel.Tags;
+            thisTest.ShowPassOrFail = viewModel.ShowPassOrFail;
+            thisTest.ShowTestScore = viewModel.ShowTestScore;
+            thisTest.CustomCompletionMessage = viewModel.CustomCompletionMessage;
+            thisTest.TimeLimitInMinutes = viewModel.TimeLimitInMinutes;
+            thisTest.PassPercentage = viewModel.PassPercentage;
+            thisTest.NumberOfFeaturedQuestions = viewModel.NumberOfFeaturedQuestions;
+            thisTest.CertificateAuthor = viewModel.CertificateAuthor;
+            thisTest.CertificateCompany = viewModel.CertificateCompany;
+            thisTest.CertificateCustomText = viewModel.CertificateCustomText;
+            thisTest.CertificateTemplatePath = viewModel.CertificateTemplatePath;
+            thisTest.EnableCertificateDownloadOnCompletion = viewModel.EnableCertificateDownloadOnCompletion;
+            thisTest.EnableEmailCertificateOnCompletion = viewModel.EnableEmailCertificateOnCompletion;
+        }
+
+        public int CreateTest(TestSettingsFormVM model, string username)
+        {
+
+            var authorId = context.Users.Single(o => o.UserId == username).Id;
+            var test = new Test()
+            {
+                AuthorId = authorId,
+                Name = model.TestName,
+                Description = model.Description,
+                Tags = null,
+                ShowPassOrFail = model.ShowPassOrFail,
+                ShowTestScore = model.ShowTestScore,
+                CustomCompletionMessage = model.CustomCompletionMessage,
+                TimeLimitInMinutes = model.TimeLimitInMinutes,
+                PassPercentage = model.PassPercentage,
+                NumberOfFeaturedQuestions = model.NumberOfFeaturedQuestions,
+                CertificateAuthor = model.CertificateAuthor,
+                CertificateCompany = model.CertificateCompany,
+                CertificateCustomText = model.CertificateCustomText,
+                CertificateTemplatePath = model.CertificateTemplatePath,
+                EnableCertificateDownloadOnCompletion = model.EnableCertificateDownloadOnCompletion,
+                EnableEmailCertificateOnCompletion = model.EnableEmailCertificateOnCompletion
+            };
+            context.Tests.Add(test);
+            context.SaveChanges();
+            return test.Id;
         }
     }
 }

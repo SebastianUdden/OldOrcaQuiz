@@ -29,12 +29,8 @@ namespace OrcaQuiz.Controllers
         {
             //PdfUtils.GenerateCerfificate(env, "OrcaQuizTemplate.pdf", "cerBOficat2.pdf", new PdfSymbols { CertificatName = "C#.NET", Author = "Pontus Wittemark", Company = "WarmKitten", Details = "Bacon ipsum dolor amet filet mignon brisket Bacon ipsum dolor amet filet mignon brisket Bacon ipsum dolor amet filet mignon brisket", StudentName = "Mikael Brunnberg" });
 
-            var model = repository.GetAllTests();
-            var viewModel = new DashboardVM()
-            {
-                Tests = model.ToList()
-            };
-            return View(viewModel);
+            var model = repository.GetDashboardVM();
+            return View(model);
         }
 
         [Route("Admin/ShowResults/{testId}")]
@@ -82,20 +78,19 @@ namespace OrcaQuiz.Controllers
             return PartialView("_AnswerFormPartial", model);
         }
 
-        [HttpPost]
-        public PartialViewResult EditQuestionText(int questionId)
-        {
-            var thisQuestion = repository.GetAllQuestions().SingleOrDefault(o => o.Id == questionId);
+        //public PartialViewResult EditQuestionText(int questionId)
+        //{
+        //    var thisQuestion = repository.GetAllQuestions().SingleOrDefault(o => o.Id == questionId);
 
-            var model = new QuestionFormVM()
-            {
-                QuestionText = thisQuestion.QuestionText,
-                IsInEditQuestion = true,
-                QuestionType = thisQuestion.QuestionType
-            };
+        //    var model = new QuestionFormVM()
+        //    {
+        //        QuestionText = thisQuestion.QuestionText,
+        //        IsInEditQuestion = true,
+        //        QuestionType = thisQuestion.QuestionType
+        //    };
 
-            return PartialView("_EditQuestionPartial");
-        }
+        //    return PartialView("_EditQuestionPartial");
+        //}
 
         public IActionResult CreateEmptyAnswer(int testId, int questionId)
         {
@@ -120,54 +115,15 @@ namespace OrcaQuiz.Controllers
         [Route("Admin/Test/{testId}/Settings")]
         public IActionResult EditTestSettings(int testId)
         {
-            var output = repository.GetAllTests()
-                .Where(o => o.Id == testId)
-                .Select(model => new TestSettingsFormVM
-                {
-                    TestName = model.Name,
-                    Description = model.Description,
-                    Tags = model.Tags,
-                    ShowPassOrFail = model.ShowPassOrFail,
-                    ShowTestScore = model.ShowTestScore,
-                    CustomCompletionMessage = model.CustomCompletionMessage,
-                    TimeLimitInMinutes = model.TimeLimitInMinutes,
-                    PassPercentage = model.PassPercentage,
-                    NumberOfFeaturedQuestions = model.NumberOfFeaturedQuestions,
-                    CertificateAuthor = model.CertificateAuthor,
-                    CertificateCompany = model.CertificateCompany,
-                    CertificateCustomText = model.CertificateCustomText,
-                    CertTemplatePath = model.CertificateTemplatePath,
-                    EnableCertDownloadOnCompletion = model.EnableCertificateDownloadOnCompletion,
-                    EnableEmailCertOnCompletion = model.EnableEmailCertificateOnCompletion
-                })
-                .SingleOrDefault();
-
-            return View(output);
+            var model = repository.GetTestSettingsFormVM(testId);                
+            return View(model);
         }
 
         [Route("Admin/Test/{testId}/Settings")]
         [HttpPost]
-        public IActionResult EditTestSettings(TestSettingsFormVM viewModel, int? testId)
+        public IActionResult EditTestSettings(TestSettingsFormVM viewModel, int testId)
         {
-            if (testId != null)
-            {
-                var thisTest = repository.GetAllTests().SingleOrDefault(o => o.Id == testId);
-                thisTest.Description = viewModel.Description;
-                thisTest.Name = viewModel.TestName;
-                thisTest.Tags = viewModel.Tags;
-                thisTest.ShowPassOrFail = viewModel.ShowPassOrFail;
-                thisTest.ShowTestScore = viewModel.ShowTestScore;
-                thisTest.CustomCompletionMessage = viewModel.CustomCompletionMessage;
-                thisTest.TimeLimitInMinutes = viewModel.TimeLimitInMinutes;
-                thisTest.PassPercentage = viewModel.PassPercentage;
-                thisTest.NumberOfFeaturedQuestions = viewModel.NumberOfFeaturedQuestions;
-                thisTest.CertificateAuthor = viewModel.CertificateAuthor;
-                thisTest.CertificateCompany = viewModel.CertificateCompany;
-                thisTest.CertificateCustomText = viewModel.CertificateCustomText;
-                thisTest.CertificateTemplatePath = viewModel.CertTemplatePath;
-                thisTest.EnableCertificateDownloadOnCompletion = viewModel.EnableCertDownloadOnCompletion;
-                thisTest.EnableEmailCertificateOnCompletion = viewModel.EnableEmailCertOnCompletion;
-            }
+            repository.UpdateTestSettings(viewModel, testId);
             return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });
         }
 
@@ -184,25 +140,8 @@ namespace OrcaQuiz.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var testId = repository.CreateTest(new Test()
-            {
-                Name = model.TestName,
-                Description = model.Description,
-                Tags = User.Identity.Name,
-                ShowPassOrFail = model.ShowPassOrFail,
-                ShowTestScore = model.ShowTestScore,
-                CustomCompletionMessage = model.CustomCompletionMessage,
-                TimeLimitInMinutes = model.TimeLimitInMinutes,
-                PassPercentage = model.PassPercentage,
-                NumberOfFeaturedQuestions = model.NumberOfFeaturedQuestions,
-                CertificateAuthor = model.CertificateAuthor,
-                CertificateCompany = model.CertificateCompany,
-                CertificateCustomText = model.CertificateCustomText,
-                CertificateTemplatePath = model.CertTemplatePath,
-                EnableCertificateDownloadOnCompletion = model.EnableCertDownloadOnCompletion,
-                EnableEmailCertificateOnCompletion = model.EnableEmailCertOnCompletion
-            });
-
+            var testId = repository.CreateTest(model, User.Identity.Name);
+            
             return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });
         }
 
