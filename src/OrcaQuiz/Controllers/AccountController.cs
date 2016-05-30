@@ -59,7 +59,6 @@ namespace OrcaQuiz.Controllers
             }
 
             return View();
-
         }
 
         [Route("Account/Signin")]
