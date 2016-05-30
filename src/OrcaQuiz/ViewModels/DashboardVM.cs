@@ -9,6 +9,8 @@ namespace OrcaQuiz.ViewModels
     public class DashboardVM
     {
         public List<DashboardTestItemVM> Tests { get; set; }
+
+        public bool IsUserAdmin { get; set; }
     }
 
 }

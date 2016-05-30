@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
 
 namespace OrcaQuiz.Repositories
 {
@@ -17,11 +18,15 @@ namespace OrcaQuiz.Repositories
     {
         OrcaQuizContext context;
         IdentityDbContext identityContext;
+        UserManager<IdentityUser> userManager;
+
         public DbRepository(OrcaQuizContext context,
+        UserManager<IdentityUser> userManager,
             IdentityDbContext identityContext)
         {
             this.identityContext = identityContext;
             this.context = context;
+            this.userManager = userManager;
         }
         public void CopyQuestionToTest(int questionId, int testId, string username)
         {
@@ -70,10 +75,12 @@ namespace OrcaQuiz.Repositories
             context.SaveChanges();
 
         }
-        public DashboardVM GetDashboardVM()
+        public async Task<DashboardVM> GetDashboardVM(string userName)
         {
+            var user = await userManager.FindByNameAsync(userName);
             return new DashboardVM
             {
+                IsUserAdmin = await userManager.IsInRoleAsync(user, "Admin"),
                 Tests = context.Tests.Select(o => new DashboardTestItemVM
                 {
                     Id = o.Id,

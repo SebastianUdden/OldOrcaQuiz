@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using OrcaQuiz.ViewModels;
 using OrcaQuiz.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,12 +14,15 @@ namespace OrcaQuiz.Controllers
 {
     public class AccountController : Controller
     {
-
+        RoleManager<IdentityRole> roleManager;
+        UserManager<IdentityUser> userManager;
         IAccountRepository accountRepository;
 
-        public AccountController(IAccountRepository accountRepository)
+        public AccountController(IAccountRepository accountRepository, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
             this.accountRepository = accountRepository;
+            this.roleManager = roleManager;
+            this.userManager = userManager;
         }
         // GET: /<controller>/
         [Route("Account/Register")]
@@ -37,7 +41,7 @@ namespace OrcaQuiz.Controllers
             var result = await accountRepository.Register(model);
             if (result.Succeeded)
             {
-                return RedirectToAction(nameof(AdminController.Dashboard), "Admin");
+                return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
             }
             else
             {
@@ -55,7 +59,7 @@ namespace OrcaQuiz.Controllers
             if (autoSignIn)
             {
                 await accountRepository.SignIn(new SignInVM { Username = "orca@quiz.com", Password = "P@ssw0rd" });
-                return RedirectToAction(nameof(AdminController.Dashboard), "Admin");
+                return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
             }
 
             return View();
@@ -75,7 +79,14 @@ namespace OrcaQuiz.Controllers
                 return View(model);
             }
 
-            return RedirectToAction(nameof(AdminController.Dashboard), "Admin");
+            //var roleResult = await roleManager.CreateAsync(new IdentityRole("Admin"));
+            //if (roleResult.Succeeded)
+            //{
+            //    var user = await userManager.FindByNameAsync(model.Username);
+            //    var userRoleResult = await userManager.AddToRoleAsync(user, "Admin");
+            //}
+
+            return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
         }
 
         [Route("Account/Signout")]

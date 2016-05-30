@@ -34,7 +34,7 @@ namespace OrcaQuiz.Repositories
         #region Question
         void UpdateQuestion(int testId, int questionId, EditQuestionVM viewModel);
         int CreateTestQuestion(int testId);
-        DashboardVM GetDashboardVM();
+        Task<DashboardVM> GetDashboardVM(string username);
         EditQuestionVM GetEditQuestionVM(int testId, int questionId);
         QuestionFormVM GetPreviewQuestionPartial(int questionId);
         QuestionFormVM GetPreviewQuestion(int questionId);
