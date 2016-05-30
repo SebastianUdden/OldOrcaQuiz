@@ -23,7 +23,7 @@ namespace OrcaQuiz.Repositories
             this.identityContext = identityContext;
             this.context = context;
         }
-        public void CopyQuestionToTest(int questionId, int testId, string userName)
+        public void CopyQuestionToTest(int questionId, int testId, string username)
         {
             //var test = context.Tests.Single(o => o.Id == testId);
             var question = context.Questions
@@ -33,7 +33,7 @@ namespace OrcaQuiz.Repositories
             //var user = context.Users.Single(o => o.UserId == identityContext.Users
             //    .Single(iu => iu.UserName == userName).Id);
 
-            var currentUser = identityContext.Users.Single(o => o.UserName == userName);
+            var currentUser = identityContext.Users.Single(o => o.UserName == username);
             var user = context.Users.Single(o => o.UserId == currentUser.Id);
 
             var copiedQuestion = new Question()
@@ -713,8 +713,7 @@ namespace OrcaQuiz.Repositories
 
         public int CreateTest(TestSettingsFormVM model, string username)
         {
-
-            var authorId = context.Users.Single(o => o.UserId == username).Id;
+            var authorId = GetUserIdByUsername(username);
             var test = new Test()
             {
                 AuthorId = authorId,
@@ -737,6 +736,14 @@ namespace OrcaQuiz.Repositories
             context.Tests.Add(test);
             context.SaveChanges();
             return test.Id;
+        }
+
+        public int GetUserIdByUsername(string username)
+        {
+            var aspNetUserId = identityContext.Users.Single(o => o.UserName == username).Id;
+            var userId = context.Users.Single(o => o.UserId == aspNetUserId).Id;
+
+            return userId;
         }
     }
 }
