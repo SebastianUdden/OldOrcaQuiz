@@ -75,28 +75,24 @@ namespace OrcaQuiz.Repositories
             _users.Add(new User()
             {
                 Id = 1,
-                Email = "linus.joensson.ms@outlook.com",
                 FirstName = "Linus",
                 Lastname = "Joensson",
             });
             _users.Add(new User()
             {
                 Id = 2,
-                Email = "sebastian.udden@gmail.com",
                 FirstName = "Sebastian",
                 Lastname = "Uddén",
             });
             _users.Add(new User()
             {
                 Id = 3,
-                Email = "mattiashagelin@outlook.com",
                 FirstName = "Mattias",
                 Lastname = "Hagelin",
             });
             _users.Add(new User()
             {
                 Id = 4,
-                Email = "patrikweibus@outlook.com",
                 FirstName = "Patrik",
                 Lastname = "Weibus",
             });
@@ -907,7 +903,6 @@ namespace OrcaQuiz.Repositories
                 .Select(ts => new
                 {
                     name = ts.User.FirstName + " " + ts.User.Lastname,
-                    email = ts.User.Email,
                     testscore = TestSessionUtils.GetScore(ts, GetAllAnswers(), GetAllQuestions())
                 }).ToArray()
             };

@@ -13,7 +13,6 @@ namespace OrcaQuiz.Models
         //public virtual IdentityUser IdentityUser { get; set; }
         public string FirstName { get; set; }
         public string Lastname { get; set; }
-        public string Email { get; set; }
         public virtual List<TestSession> TestSessions { get; set; }
 
         public User()

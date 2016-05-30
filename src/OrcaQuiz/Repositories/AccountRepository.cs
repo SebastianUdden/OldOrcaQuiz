@@ -35,7 +35,6 @@ namespace OrcaQuiz.Repositories
             };
             var user = new User
             {
-                Email = model.Email,
                 FirstName = model.FirstName,
                 Lastname = model.LastName,
                 UserId = identityUser.Id

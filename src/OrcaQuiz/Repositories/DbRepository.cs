@@ -413,7 +413,6 @@ namespace OrcaQuiz.Repositories
                 .Select(ts => new
                 {
                     name = ts.User.FirstName + " " + ts.User.Lastname,
-                    email = ts.User.Email,
                     testscore = TestSessionUtils.GetScore(ts, context.Answers.ToArray(), context.Questions.ToArray())
                 }).ToArray()
             };
