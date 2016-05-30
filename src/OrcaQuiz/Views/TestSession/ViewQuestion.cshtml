@@ -22,15 +22,15 @@
 
             @if (Model.QuestionIndex > 1)
             {
-                <button type="submit" value="Previous {{counter}}" name="submit" class="orcaBtn btnWidth120 TopMargin20">Previous<span class="rightMargin5 fa fa-chevron-left"></span></button>
+                <button type="submit" value="Previous" name="submit" class="orcaBtn btnWidth120 TopMargin20">Previous<span class="rightMargin5 fa fa-chevron-left"></span></button>
             }
             @if (Model.QuestionIndex < Model.NumOfQuestion)
             {
-                <button type="submit" value="Next {{counter}}" name="submit" class="orcaBtn btnWidth120 TopMargin20">Next<span class="LeftMargin5 fa fa-chevron-right"></span></button>
+                <button type="submit" value="Next" name="submit" class="orcaBtn btnWidth120 TopMargin20">Next<span class="LeftMargin5 fa fa-chevron-right"></span></button>
             }
             else
             {
-                <button type="submit" value="Submit {{counter}}" name="submit" class="orcaBtn btnWidth120 TopMargin20 bgGreen rightFloat">Submit<span class="fa fa-check rightMargin5"></span></button>
+                <button type="submit" value="Submit" name="submit" class="orcaBtn btnWidth120 TopMargin20 bgGreen rightFloat"><span class="fa fa-check rightMargin5"></span></button>
             }
         </form>
     </div>

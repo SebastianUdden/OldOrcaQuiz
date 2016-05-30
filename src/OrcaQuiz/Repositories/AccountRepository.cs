@@ -26,7 +26,7 @@ namespace OrcaQuiz.Repositories
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
-        public async void Register(RegistrationVM model)
+        public async Task<IdentityResult> Register(RegistrationVM model)
         {
             var identityUser = new IdentityUser
             {
@@ -50,6 +50,8 @@ namespace OrcaQuiz.Repositories
 
                 await signInManager.SignInAsync(identityUser, isPersistent: false);
             }
+
+            return result;
         }
 
         public async Task<SignInResult> SignIn(SignInVM model)

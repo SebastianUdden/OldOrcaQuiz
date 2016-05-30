@@ -4,7 +4,8 @@
 }
 <div class="bgWhite padding20">
     <h1>Register</h1>
-    <form asp-controller="Account" asp-action="Index">
+    <div asp-validation-summary="All"></div>
+    <form asp-controller="Account" asp-action="Register">
         <label asp-for="Email"></label>
         <br />
         <input class="form-control input-group-sm" asp-for="Email" placeholder="E-mail"/>

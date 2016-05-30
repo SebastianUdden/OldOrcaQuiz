@@ -29,11 +29,18 @@ namespace OrcaQuiz.Controllers
 
         [HttpPost]
         [Route("Account/Register")]
-        public IActionResult Register(RegistrationVM model)
-        { 
-            accountRepository.Register(model);
-
-            return View();
+        public async Task<IActionResult> Register(RegistrationVM model)
+        {
+            var result = await accountRepository.Register(model);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(AdminController.Dashboard), "Admin");
+            }
+            else
+            {
+                ModelState.AddModelError(String.Empty, result.Errors.First().Description);
+                return View(model);
+            }
         }
 
         [Route("Account/Signin")]
@@ -55,7 +62,7 @@ namespace OrcaQuiz.Controllers
         {
             if (!ModelState.IsValid)
                 return View(model);
-            
+
             var result = await accountRepository.SignIn(model);
             if (!result.Succeeded)
             {
