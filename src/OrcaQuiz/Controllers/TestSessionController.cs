@@ -58,16 +58,12 @@ namespace OrcaQuiz.Controllers
         public IActionResult ViewQuestion(int testSessionId, int questionIndex, QuestionFormVM viewModel, string submit)
         {
             var hasTimeLeft = repository.UpdateSessionAnswers(testSessionId, questionIndex, viewModel.SelectedAnswers, viewModel.Comment);
-            var actionAndSecondsFromButton = submit.Split(' ');
-            double secondsLeft;
-            string submitAction = actionAndSecondsFromButton[0];  
-            if (double.TryParse(actionAndSecondsFromButton[1], out secondsLeft))
 
-            if (string.Equals("previous", submitAction, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals("previous", submit, StringComparison.OrdinalIgnoreCase))
                 questionIndex--;
-            else if (string.Equals("next", submitAction, StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals("next", submit, StringComparison.OrdinalIgnoreCase))
                 questionIndex++;
-            else if (string.Equals("submit", submitAction, StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals("submit", submit, StringComparison.OrdinalIgnoreCase))
             {
                 repository.SubmitTestSession(testSessionId);
                 return RedirectToAction(nameof(SessionCompleted),
@@ -78,8 +74,8 @@ namespace OrcaQuiz.Controllers
 
             if (hasTimeLeft)
             {
-                var session = repository.GetTestSessionById(testSessionId);
-                session.SecondsLeft = secondsLeft;
+                //var session = repository.GetTestSessionById(testSessionId);
+                //session.SecondsLeft = secondsLeft;
 
                 return RedirectToAction(nameof(ViewQuestion),
                     new { TestSessionId = testSessionId, QuestionIndex = questionIndex });

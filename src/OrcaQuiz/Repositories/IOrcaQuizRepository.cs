@@ -22,19 +22,19 @@ namespace OrcaQuiz.Repositories
         #endregion
 
         #region Test
-        Test[] GetAllTests();
-        int CreateTest(Test test);
+        int CreateTest(TestSettingsFormVM test, string username);
         void CopyQuestionToTest(int questionId, int testId, string userName);
         object GetAllTestsImportData(int currentTestId);
         object GetCurrentTestImportData(int id);
         void RemoveQuestionFromTest(int questionId, int testId);
+        TestSettingsFormVM GetTestSettingsFormVM(int testId);
+        void UpdateTestSettings(TestSettingsFormVM viewModel, int testId);
         #endregion
 
         #region Question
-        Question[] GetAllQuestions();
-
         void UpdateQuestion(int testId, int questionId, EditQuestionVM viewModel);
         int CreateTestQuestion(int testId);
+        Task<DashboardVM> GetDashboardVM(string username);
         EditQuestionVM GetEditQuestionVM(int testId, int questionId);
         QuestionFormVM GetPreviewQuestionPartial(int questionId);
         QuestionFormVM GetPreviewQuestion(int questionId);
@@ -43,7 +43,6 @@ namespace OrcaQuiz.Repositories
         #endregion
 
         #region Answer
-        Answer[] GetAllAnswers();
         AnswerDetailVM UpdateAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect);
         int CreateAnswer(int questionId);
         int CreateAnswer(int questionId, AnswerDetailVM viewModel);
@@ -55,7 +54,6 @@ namespace OrcaQuiz.Repositories
         SessionIndexVM GetSessionIndexVM(int testId, string userName);
         Task<int> StartNewSession(string userName, int testId);
         void SubmitTestSession(int testSessionId);
-        TestSession GetTestSessionById(int testSessionId);
         SessionCompletedVM GetSessionCompletedVM(int testSessionId, SessionCompletedReason sessionCompletedReason);
         #endregion
 
@@ -63,5 +61,9 @@ namespace OrcaQuiz.Repositories
         PdfSymbols GetCertificateSymbols(int testSessionId);
         ShowResultsVM GetShowResultsVM(int testId);
         #endregion
+
+        //#region User
+        // Create user etc..
+        //#endregion
     }
 }

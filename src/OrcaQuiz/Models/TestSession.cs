@@ -15,7 +15,7 @@ namespace OrcaQuiz.Models
         public DateTime StartTime { get; set; }
         public DateTime? SubmitTime { get; set; }
         public virtual List<QuestionResult> QuestionResults { get; set; }
-        public double? SecondsLeft { get; set; }
+        //public double? SecondsLeft { get; set; }
 
         //public TestSession()
         //{

@@ -9,7 +9,7 @@ namespace OrcaQuiz.Repositories
 {
     public interface IAccountRepository
     {
-        void Register(RegistrationVM model);
+        Task<IdentityResult> Register(RegistrationVM model);
         Task<SignInResult> SignIn(SignInVM model);
 
         void SignOut();

@@ -4,6 +4,7 @@
 }
 <div class="bgWhite padding20">
     <h1>Sign in</h1>
+    <div asp-validation-summary="All"></div>
 <form asp-controller="Account", asp-action="SignIn">
     <label asp-for="Username"></label>
     <input class="form-control input-group-sm" asp-for="Username" placeholder="Username"/>
