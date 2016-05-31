@@ -23,7 +23,7 @@ namespace OrcaQuiz.Controllers
         public IActionResult GetCertificate(int testSessionId)
         {
             var symbols = repository.GetCertificateSymbols(testSessionId);
-            var bytes = PdfUtils.GenerateCerfificate(env, "OrcaQuizTemplate.pdf", symbols);
+            var bytes = PdfUtils.GenerateCerfificate(env, symbols.TemplateName, symbols);
             
             return File(bytes, "application/pdf");
         }

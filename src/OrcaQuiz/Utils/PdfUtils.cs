@@ -63,5 +63,6 @@ namespace OrcaQuiz.Utils
         public string StudentName { get; set; }
         public string Author { get; set; }
         public string Company { get; set; }
+        public string TemplateName { get; set; }
     }
 }

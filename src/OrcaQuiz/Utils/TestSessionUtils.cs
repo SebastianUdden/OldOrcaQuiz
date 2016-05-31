@@ -126,10 +126,12 @@ namespace OrcaQuiz.Utils
 
                             foreach (var selectedAnswer in selectedAnswers)
                             {
-                                var selectedAnswerId = Convert.ToInt32(selectedAnswer);
-
-                                if (selectedAnswerId == answer.Id)
-                                    correctSelectedAnswerCount++;
+                                int selectedAnswerId = -1;
+                                if(int.TryParse(selectedAnswer, out selectedAnswerId))
+                                {
+                                    if (selectedAnswerId == answer.Id)
+                                        correctSelectedAnswerCount++;
+                                }
                             }
                         }
                     }
@@ -166,13 +168,15 @@ namespace OrcaQuiz.Utils
                             foreach (var selectedAnswer in selectedAnswers)
                             {
                                 //System.Diagnostics.Debug.WriteLine(selectedAnswer);
-                                var selectedAnswerId = Convert.ToInt32(selectedAnswer);
+                                int selectedAnswerId;
                                 //System.Diagnostics.Debug.WriteLine(selectedAnswerId);
                                 //System.Diagnostics.Debug.WriteLine(answer.Id);
-
-                                if (selectedAnswerId == answer.Id)
+                                if(int.TryParse(selectedAnswer, out selectedAnswerId))
                                 {
-                                    questionScore++;
+                                    if (selectedAnswerId == answer.Id)
+                                    {
+                                        questionScore++;
+                                    }
                                 }
                             }
                         }

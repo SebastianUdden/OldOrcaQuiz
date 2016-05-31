@@ -193,7 +193,8 @@ namespace OrcaQuiz.Repositories
                 CertificateName = testSession.Test.Name,
                 Date = testSession.StartTime.ToString("yyyy-MM-dd"),
                 Details = testSession.Test.CertificateCustomText,
-                StudentName = $"{testSession.User.FirstName} {testSession.User.Lastname}"
+                StudentName = $"{testSession.User.FirstName} {testSession.User.Lastname}",
+                TemplateName = testSession.Test.CertificateTemplatePath
             };
         }
 

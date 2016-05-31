@@ -47,9 +47,10 @@
     }
 </div>
 <!-- floatat knapparna till höger, bra? in i css isf. ändrat Go Back/save till endast Dashboard-->
-<a href="~/Admin/Dashboard">
+<a asp-controller="dashboard" asp-action="index">
     <button class="orcaBtn btnWidth120 leftFloat">
-        <span class="fa fa-chevron-left rightMargin5"></span>Back
+        <span class="fa fa-chevron-left rightMargin5"></span>
+        Back
     </button>
 </a>
 
