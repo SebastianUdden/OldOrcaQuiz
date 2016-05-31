@@ -97,8 +97,10 @@
                     Congratulations @Model.UserName
                 </h2>
                 <p>You passed the test</p>
-                <button class="orcaBtn btnWidth120 TopMargin20" onclick="document.location.href = '/pdf/GetCertificate/@Model.TestSessionId'">Download Certificate</button>
-                @*<embed height="800px;" width="70%;" src= />*@
+                <button class="orcaBtn btnWidth120 TopMargin20" onclick="window.open('/pdf/GetCertificate/@Model.TestSessionId', '_blank')">
+                    Download Certificate
+                </button>
+                @*<embed height="800px;" width="70%;" src= />*@                
             }
             else
             {
