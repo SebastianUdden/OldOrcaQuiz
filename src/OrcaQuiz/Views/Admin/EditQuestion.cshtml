@@ -7,7 +7,7 @@
 
         <h2 class="grayText topMargin-8">Question Settings</h2>
 
-        <form asp-controller="Admin" asp-action="UpdateQuestionSettings" asp-route-testId="@Model.TestId" asp-route-questionId="@Model.QuestionId">
+        <form asp-controller="Admin" asp-action="EditQuestionSettings" asp-route-testId="@Model.TestId" asp-route-questionId="@Model.QuestionId">
             <div class="row">
                 <div class="form-group col-sm-4">
                     <label asp-for="Type"></label>
@@ -35,7 +35,7 @@
             <div id="editQuestionTextDiv" hidden="hidden">
                 @Html.Partial("_EditQuestionPartial", Model.QuestionFormVM)
 
-                @*<button onclick="UpdateQuestionText(@Model.QuestionId)" hidden="hidden"
+                @*<button onclick="EditQuestionText(@Model.QuestionId)" hidden="hidden"
                             id="@("btnSaveQuestionTxt" + Model.QuestionId)" class="orcaBtn btnWidth120 TopMargin20">
                         <span class="fa fa-save rightMargin5"></span>
                         Save
@@ -98,8 +98,8 @@
                             Sort Order:
                             <input type="text" id="@("sortOrder"+answer.AnswerId)" value="@answer.SortOrder" name="sortOrder" />
                             <br />
-                            <button onclick="UpdateAnswer(@answer.AnswerId, @Model.QuestionId)"
-                                    id="@("btnUpdateAnswer" + answer.AnswerId)" class="orcaBtn btnWidth120 TopMargin20">
+                            <button onclick="EditAnswer(@answer.AnswerId, @Model.QuestionId)"
+                                    id="@("btnEditAnswer" + answer.AnswerId)" class="orcaBtn btnWidth120 TopMargin20">
                                 <span class="fa fa-save rightMargin5">Save</span>
                             </button>
                         </div>
@@ -134,7 +134,7 @@
         //    $("#editAnswerDiv" + answerId).toggle();
         //    $("#btnRemoveAnswer" + answerId).toggle();
         //    $("#previewAnswerDiv" + answerId).toggle();
-        //    $("#btnUpdateAnswer" + answerId).toggle();
+        //    $("#btnEditAnswer" + answerId).toggle();
         //    $("#btnShowEditAnswer" + answerId).toggle();
         //}
 
@@ -143,11 +143,11 @@
             tinymce.execCommand('mceAddEditor', false, 'mceAnswerBox' + answerId);
         }
 
-        function UpdateAnswer(answerId, questionId) {
+        function EditAnswer(answerId, questionId) {
             tinymce.execCommand('mceAddEditor', false, 'mceAnswerBox' + answerId);
 
             var answerText = tinymce.get('mceAnswerBox' + answerId).getContent();
-            var actionUrl = "/Admin/UpdateAnswer";
+            var actionUrl = "/Admin/EditAnswer";
             var isCorrect = (document.getElementById('answerIsCorrect' + answerId).checked);
             var sortOrder = $("#sortOrder" + answerId).val();
 
@@ -158,17 +158,17 @@
 
             $("#editAnswerDiv" + answerId).toggle();
 
-            //$("#btnUpdateAnswer" + answerId).toggle();
+            //$("#btnEditAnswer" + answerId).toggle();
             //$("#btnShowEditAnswer" + answerId).toggle();
             //$("#editAnswerDiv" + answerId).toggle();
             //$("#btnRemoveAnswer" + answerId).toggle();
             //$("#previewAnswerDiv" + answerId).toggle();
         }
 
-        //function UpdateQuestionText(id) {
+        //function EditQuestionText(id) {
 
         //    var text = tinymce.get('mceQuestionBox').getContent();
-        //    var actionUrl = "/Admin/UpdateQuestionText";
+        //    var actionUrl = "/Admin/EditQuestionText";
 
         //    $.post(actionUrl, { questionId: id, questionText: text })
         //    .done(function (response) {

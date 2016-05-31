@@ -25,7 +25,7 @@
         <div class="whiteSquare BottomMargin20" >
 
             <div class="buttons rightFloat topMargin-8" onclick="">
-                    <a class="orcaBtn btnWidth40 rightMargin5 orcaTool-tooltip editQuestion" asp-controller="Admin" asp-action="UpdateQuestion" asp-route-questionId="@question.Id" asp-route-testId="@Model.TestId" data-toggle="tooltip" title="Edit Question">
+                    <a class="orcaBtn btnWidth40 rightMargin5 orcaTool-tooltip editQuestion" asp-controller="Admin" asp-action="EditQuestion" asp-route-questionId="@question.Id" asp-route-testId="@Model.TestId" data-toggle="tooltip" title="Edit Question">
                         <span class="fa fa-pencil white LeftMargin5"></span>
                     </a>
                 <a class="orcaBtn orcaTool-tooltip bgRed redT" asp-controller="Admin" asp-action="RemoveQuestion" asp-route-questionId="@question.Id" asp-route-testId="@Model.TestId" data-toggle="tooltip" title="Delete Question">

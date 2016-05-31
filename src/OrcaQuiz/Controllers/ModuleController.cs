@@ -42,7 +42,7 @@ namespace OrcaQuiz.Controllers
         [Route("Admin/EditModule/{Id}")]
         public IActionResult EditModule(ModuleVM model)
         {
-            repository.UpdateModule(model);
+            repository.EditModule(model);
             return RedirectToAction("Modules");
             //return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });
         }

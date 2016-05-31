@@ -29,38 +29,38 @@
                                 case OrcaQuiz.Models.Enums.QuestionType.SingleChoice:
                                     {
                                         <p class="onTheLine" for="@($"answer{answer.AnswerId}")">
-                                            <div onclick="CheckRadioButton('@($"answer{answer.AnswerId}")')">
-                                                <input type="radio"
-                                                       id="@string.Format("answer{0}", answer.AnswerId)"
-                                                       name="@nameof(Model.SelectedAnswers)"
-                                                       value="@answer.AnswerId"
-                                                       style="font-size:x-large;"
-                                                       @(answer.IsChecked ? "checked=\"checked\"" : "") />
+                                            <input type="radio"
+                                                   id="@string.Format("answer{0}", answer.AnswerId)"
+                                                   name="@nameof(Model.SelectedAnswers)"
+                                                   value="@answer.AnswerId"
+                                                   style="font-size:x-large;"
+                                                   @(answer.IsChecked ? "checked=\"checked\"" : "") />
+                                            <span onclick="CheckRadioButton('@($"answer{answer.AnswerId}")')">
                                                 @(Html.Raw(answer.AnswerText))
-                                            </div>
+                                            </span>
                                         </p>
                                     }
                                     break;
                                 case OrcaQuiz.Models.Enums.QuestionType.MultipleChoice:
                                     {
                                         <p class="onTheLine" for="@($"answer{answer.AnswerId}")">
-                                            
-                                                @if (answer.IsChecked)
-                                                {
-                                                    <input type="checkbox"
-                                                           id="@($"answer{answer.AnswerId}")"
-                                                           name="@nameof(Model.SelectedAnswers)"
-                                                           value="@answer.AnswerId"
-                                                           checked="checked" />
-                                                }
-                                                else
-                                                {
-                                                    <input type="checkbox"
-                                                           id="@($"answer{answer.AnswerId}")"
-                                                           name="@nameof(Model.SelectedAnswers)"
-                                                           value="@answer.AnswerId" />
-                                                }
-                                            <span onclick="CheckCheckboxButton('@($"answer{answer.AnswerId}")')">
+
+                                            @if (answer.IsChecked)
+                                            {
+                                                <input type="checkbox"
+                                                       id="@($"answer{answer.AnswerId}")"
+                                                       name="@nameof(Model.SelectedAnswers)"
+                                                       value="@answer.AnswerId"
+                                                       checked="checked" />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox"
+                                                       id="@($"answer{answer.AnswerId}")"
+                                                       name="@nameof(Model.SelectedAnswers)"
+                                                       value="@answer.AnswerId" />
+                                            }
+                                            <span onclick="CheckRadioButton('@($"answer{answer.AnswerId}")')">
                                                 @(Html.Raw(answer.AnswerText))
                                             </span>
                                         </p>
@@ -138,10 +138,6 @@
 
 <script>
     function CheckRadioButton(id) {
-        $("#" + id).prop("checked", true);
-    }
-
-    function CheckCheckboxButton(id) {
         $("#" + id).prop("checked", !$("#" + id).prop("checked"));
     }
 </script>

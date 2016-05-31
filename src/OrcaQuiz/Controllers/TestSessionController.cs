@@ -57,7 +57,7 @@ namespace OrcaQuiz.Controllers
         [Route("TestSession/{testSessionId}/{questionIndex}")]
         public IActionResult ViewQuestion(int testSessionId, int questionIndex, QuestionFormVM viewModel, string submit)
         {
-            var hasTimeLeft = repository.UpdateSessionAnswers(testSessionId, questionIndex, viewModel.SelectedAnswers, viewModel.Comment);
+            var hasTimeLeft = repository.EditSessionAnswers(testSessionId, questionIndex, viewModel.SelectedAnswers, viewModel.Comment);
 
             if (string.Equals("previous", submit, StringComparison.OrdinalIgnoreCase))
                 questionIndex--;

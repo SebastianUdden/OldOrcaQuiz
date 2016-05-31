@@ -546,7 +546,7 @@ namespace OrcaQuiz.Repositories
             context.SaveChanges();
         }
 
-        public AnswerDetailVM UpdateAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect)
+        public AnswerDetailVM EditAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect)
         {
             var answer = context.Answers.SingleOrDefault(o => o.Id == answerId);
             var questionType = context.Questions.SingleOrDefault(o => o.Id == questionId).QuestionType;
@@ -568,7 +568,7 @@ namespace OrcaQuiz.Repositories
             return model;
         }
 
-        public void UpdateModule(ModuleVM model)
+        public void EditModule(ModuleVM model)
         {
             var module = context.Modules.Single(m => m.Id == model.Id);
             module.Name = model.Name;
@@ -577,7 +577,7 @@ namespace OrcaQuiz.Repositories
             context.SaveChanges();
         }
 
-        public void UpdateQuestion(int testId, int questionId, EditQuestionVM viewModel)
+        public void EditQuestion(int testId, int questionId, EditQuestionVM viewModel)
         {
             var question = context.Questions.SingleOrDefault(o => o.Id == questionId);
             question.SortOrder = viewModel.SortOrder;
@@ -587,7 +587,7 @@ namespace OrcaQuiz.Repositories
             context.SaveChanges();
         }
 
-        public bool UpdateSessionAnswers(int testSessionId, int questionIndex, string[] selectedAnswers, string comment)
+        public bool EditSessionAnswers(int testSessionId, int questionIndex, string[] selectedAnswers, string comment)
         {
             var currentTestSession = context.TestSessions
                 .Include(ts => ts.Test)
@@ -698,7 +698,7 @@ namespace OrcaQuiz.Repositories
                 .SingleOrDefault();
         }
 
-        public void UpdateTestSettings(TestSettingsFormVM viewModel, int testId)
+        public void EditTestSettings(TestSettingsFormVM viewModel, int testId)
         {
             var thisTest = context.Tests.SingleOrDefault(o => o.Id == testId);
             thisTest.Description = viewModel.Description;

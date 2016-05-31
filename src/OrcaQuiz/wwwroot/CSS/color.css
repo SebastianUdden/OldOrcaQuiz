@@ -91,11 +91,11 @@
     }*/
 
 .bgGreen {
-    background-color: #45b449;
+    background-color: #45b449 !important;
 }
 
     .bgGreen:hover {
-        background-color: #228b26;
+        background-color: #228b26 !important;
     }
 
 

@@ -37,19 +37,19 @@ namespace OrcaQuiz.Controllers
         {
             int questionId = repository.CreateTestQuestion(testId);
 
-            return RedirectToAction(nameof(UpdateQuestion), new { testId = testId, questionId = questionId });
+            return RedirectToAction(nameof(EditQuestion), new { testId = testId, questionId = questionId });
         }
 
         [HttpPost]
-        public IActionResult UpdateQuestionSettings(int testId, int questionId, EditQuestionVM viewModel)
+        public IActionResult EditQuestionSettings(int testId, int questionId, EditQuestionVM viewModel)
         {
-            repository.UpdateQuestion(testId, questionId, viewModel);
+            repository.EditQuestion(testId, questionId, viewModel);
 
-            return RedirectToAction(nameof(UpdateQuestion), new { testId = testId, questionId = questionId });
+            return RedirectToAction(nameof(EditQuestion), new { testId = testId, questionId = questionId });
         }
 
         //[HttpPost]
-        //public PartialViewResult UpdateQuestionText(int questionId, string questionText)
+        //public PartialViewResult EditQuestionText(int questionId, string questionText)
         //{
         //    var thisQuestion = repository.GetAllQuestions().SingleOrDefault(o => o.Id == questionId);
         //    thisQuestion.QuestionText = questionText;
@@ -64,9 +64,9 @@ namespace OrcaQuiz.Controllers
         //    return PartialView("_QuestionFormPartial", model);
         //}
 
-        public PartialViewResult UpdateAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect)
+        public PartialViewResult EditAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect)
         {
-            var model = repository.UpdateAnswer(questionId, answerId, answerText, sortOrder, isCorrect);
+            var model = repository.EditAnswer(questionId, answerId, answerText, sortOrder, isCorrect);
             return PartialView("_AnswerFormPartial", model);
         }
 
@@ -87,17 +87,17 @@ namespace OrcaQuiz.Controllers
         public IActionResult CreateEmptyAnswer(int testId, int questionId)
         {
             int answerId = repository.CreateAnswer(questionId);
-            return RedirectToAction(nameof(UpdateQuestion), new { testId = testId, questionId = questionId });
+            return RedirectToAction(nameof(EditQuestion), new { testId = testId, questionId = questionId });
         }
 
         public IActionResult RemoveAnswer(int testId, int questionId, int answerId)
         {
             repository.RemoveAnswerFromQuestion(testId, questionId, answerId);
-            return RedirectToAction(nameof(UpdateQuestion), new { testId = testId, questionId = questionId });
+            return RedirectToAction(nameof(EditQuestion), new { testId = testId, questionId = questionId });
         }
 
-        [Route("Admin/Test/{testId}/Question/{questionId}/Update")]
-        public IActionResult UpdateQuestion(int testId, int questionId)
+        [Route("Admin/Test/{testId}/Question/{questionId}/Edit")]
+        public IActionResult EditQuestion(int testId, int questionId)
         {
             var viewModel = repository.GetEditQuestionVM(testId, questionId);
 
@@ -115,7 +115,7 @@ namespace OrcaQuiz.Controllers
         [HttpPost]
         public IActionResult EditTestSettings(TestSettingsFormVM viewModel, int testId)
         {
-            repository.UpdateTestSettings(viewModel, testId);
+            repository.EditTestSettings(viewModel, testId);
             return RedirectToAction(nameof(AdminController.ManageTestQuestions), new { testId = testId });
         }
 

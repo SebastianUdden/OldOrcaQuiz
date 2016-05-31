@@ -16,7 +16,7 @@ namespace OrcaQuiz.Repositories
         ManageModuleTestsVM GetManageModuleTestVM(int moduleId);
         ModuleVM[] GetAllModules();
         ModuleVM GetModuleVMByModuleId(int moduleId);
-        void UpdateModule(ModuleVM model);
+        void EditModule(ModuleVM model);
         void CopyTestToModule(int testId, int moduleId);
         void RemoveTestFromModule(int testId, int moduleId);
         #endregion
@@ -28,11 +28,11 @@ namespace OrcaQuiz.Repositories
         object GetCurrentTestImportData(int id);
         void RemoveQuestionFromTest(int questionId, int testId);
         TestSettingsFormVM GetTestSettingsFormVM(int testId);
-        void UpdateTestSettings(TestSettingsFormVM viewModel, int testId);
+        void EditTestSettings(TestSettingsFormVM viewModel, int testId);
         #endregion
 
         #region Question
-        void UpdateQuestion(int testId, int questionId, EditQuestionVM viewModel);
+        void EditQuestion(int testId, int questionId, EditQuestionVM viewModel);
         int CreateTestQuestion(int testId);
         Task<DashboardVM> GetDashboardVM(string username);
         EditQuestionVM GetEditQuestionVM(int testId, int questionId);
@@ -43,14 +43,14 @@ namespace OrcaQuiz.Repositories
         #endregion
 
         #region Answer
-        AnswerDetailVM UpdateAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect);
+        AnswerDetailVM EditAnswer(int questionId, int answerId, string answerText, int sortOrder, bool isCorrect);
         int CreateAnswer(int questionId);
         int CreateAnswer(int questionId, AnswerDetailVM viewModel);
         void RemoveAnswerFromQuestion(int testId, int questionId, int answerId);
         #endregion
 
         #region TestSession
-        bool UpdateSessionAnswers(int testSessionId, int questionIndex, string[] selectedAnswers, string comment);
+        bool EditSessionAnswers(int testSessionId, int questionIndex, string[] selectedAnswers, string comment);
         SessionIndexVM GetSessionIndexVM(int testId, string userName);
         Task<int> StartNewSession(string userName, int testId);
         void SubmitTestSession(int testSessionId);
