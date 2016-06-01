@@ -1,15 +1,28 @@
 ﻿@model ViewQuestionVM
 
-<div ng-controller="questionController" ng-init="countdown();" ng-cloak>
+<div ng-controller="questionController" ng-cloak>
+    @*ng-init="countdown();"*@ 
     <h1>@Model.TestTitle</h1>
     <hr />
     @{
         var progressBarProcent = Math.Floor(((double)Model.QuestionIndex / Model.NumOfQuestion) * 100);
     }
     <div>
-        @if (Model.SecondsLeft.HasValue)
+        @if (true)
         {
-            <h3>Time left: {{getMinutes(counter)}}</h3>
+            <p>Start: </p>
+            <div id="startTime">@Model.TimeOfTestStart</div>
+
+            <p>End: </p>
+            <div id="secondsLeft">@Model.SecondsLeft</div>
+
+            <p>Current: </p>
+            <div id="currentTime">@DateTime.UtcNow.Hour</div>
+            <div id="currentTime">@DateTime.UtcNow.Minute</div>
+            <div id="currentTime">@DateTime.UtcNow.Second</div>
+
+            <h1>{{value}}</h1>
+            <h3>Time left: {{GetStartDate()}}</h3>
         }
         <div class="progress">
             <div class="progress-bar" role="progressbar" aria-valuenow="@progressBarProcent"
@@ -37,22 +50,46 @@
     <br />
 </div>
 
+<script>
+    var startTime;
+    var timeOut;
+    var currentTime;
+    $(document).ready(function () {
+        startTime = $("#startTime").text();
+
+        timeOut = $("#secondsLeft").text();
+        currentTime = $("#currentTime").text();
+    });
+</script>
+
 @section scripts
 {
-    @if (Model.SecondsLeft.HasValue)
+    @if (true)
     {
         <script>
             app.controller('questionController', ['$scope', '$timeout', '$interval', function ($scope, $timeout, $interval) {
-                if ($scope.counter === undefined) 
-                {
-                    $scope.counter = @Model.SecondsLeft;
-                }
-                else 
-                {
-                    alert($scope.counter);
-                }
+                $scope.value = Date.now;
+                //alert(timeOut - currentTime);
+            }]);
 
-                var counting;
+            app.controller('qController', ['$scope', '$timeout', '$interval', function ($scope, $timeout, $interval) {
+                @*if ($scope.counter === undefined)
+                {
+                    $scope.counter = @DateTime.UtcNow - Model.StartTime;
+                }
+                else
+                {*@
+                //$scope.counter =  -Model.StartTime;
+                $scope.getMinutes(counter)
+                {
+                    alert("SOMETHING WORKING!");
+                @*alert(@Model.HasTimer);
+                alert(@Model.StartTime);
+                alert($scope.counter);*@
+                }
+                //}
+
+                @*var counting;
                 $scope.timeOutMessage = "Your time is up!";
                 $scope.isTimeUp = false;
                 $scope.countdown = function () {
@@ -88,7 +125,7 @@
                     ret += "" + mins + ":" + (secs < 10 ? "0" : "");
                     ret += "" + secs;
                     return ret;
-                }
+                }*@
             }]);
         </script>
     }

@@ -11,7 +11,10 @@ namespace OrcaQuiz.ViewModels
         public string TestTitle { get; set; }
         public int QuestionIndex { get; set; }
         public int NumOfQuestion { get; set; }
-        public double? SecondsLeft { get; set; }
+        public int? SecondsLeft { get; set; }
+        public DateTime TimeOfTestStart { get; set; }
+        public bool HasTimer { get; set; }
+        //public double? SecondsLeft { get; set; }
         public QuestionFormVM QuestionFormVM { get; set; }
     }
 }

@@ -70,20 +70,6 @@ namespace OrcaQuiz.Controllers
             return PartialView("_AnswerFormPartial", model);
         }
 
-        //public PartialViewResult EditQuestionText(int questionId)
-        //{
-        //    var thisQuestion = repository.GetAllQuestions().SingleOrDefault(o => o.Id == questionId);
-
-        //    var model = new QuestionFormVM()
-        //    {
-        //        QuestionText = thisQuestion.QuestionText,
-        //        IsInEditQuestion = true,
-        //        QuestionType = thisQuestion.QuestionType
-        //    };
-
-        //    return PartialView("_EditQuestionPartial");
-        //}
-
         public IActionResult CreateEmptyAnswer(int testId, int questionId)
         {
             int answerId = repository.CreateAnswer(questionId);

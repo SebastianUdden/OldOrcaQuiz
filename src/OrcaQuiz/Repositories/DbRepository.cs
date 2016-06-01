@@ -229,6 +229,24 @@ namespace OrcaQuiz.Repositories
                 .SingleOrDefault(o => o.Id == questionId);
             var testQuestions = context.Questions.Where(o => o.TestId == testId).ToArray();
 
+            int? sortOrder = 0;
+            if (testQuestions.Count() > 0 && testQuestions.Single(o => o.Id == questionId).SortOrder == null)
+            {
+                if(testQuestions.Max(o => o.SortOrder) == null)
+                {
+                    sortOrder = 10;
+                }
+                else
+                {
+                    sortOrder = testQuestions.Max(o => o.SortOrder) + 10;
+                }
+            }
+            else
+            {
+                sortOrder = testQuestions.Single(o => o.Id == questionId).SortOrder;
+            }
+
+
             var viewModel = new EditQuestionVM()
             {
                 ItemType = new SelectListItem[]
@@ -242,7 +260,9 @@ namespace OrcaQuiz.Repositories
                 QuestionText = thisQuestion.QuestionText,
                 QuestionId = questionId,
                 Type = thisQuestion.QuestionType,
-                SortOrder = testQuestions.Count() > 0 ? testQuestions.Max(o => o.SortOrder) + 10 : 10,
+                //true: Har vi mer än 0 frågor och inte skickat in ett eget sort-värde => man kollar på högsta sortordern och plussar på 10
+                //false: Om vi har 0 frågor eller skickar in ett eget värde => sätts värdet till eget värde
+                SortOrder = sortOrder,
                 QuestionFormVM = new QuestionFormVM()
                 {
                     QuestionText = thisQuestion.QuestionText,
@@ -254,6 +274,7 @@ namespace OrcaQuiz.Repositories
                 HasComment = thisQuestion.HasComment,
             };
 
+            
             if ((viewModel.Type == QuestionType.MultipleChoice) || (viewModel.Type == QuestionType.SingleChoice))
             {
                 viewModel.AnswerDetailVMs = thisQuestion.Answers
@@ -368,7 +389,7 @@ namespace OrcaQuiz.Repositories
             return new SessionCompletedVM()
             {
                 TestSessionId = testSessionId,
-                Date = DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                Date = DateTime.UtcNow.Date.ToString("dd/MM/yyyy"),
                 IsSuccessful = GradeUtils.CheckHasPassed(testSession, testSession.Test.PassPercentage, questionsAndAnswers),
                 UserName = $"{testSession.User.FirstName} {testSession.User.Lastname}",
                 SessionCompletedReason = sessionCompletedReason
@@ -458,6 +479,9 @@ namespace OrcaQuiz.Repositories
                 TestTitle = currentTest.Name,
                 NumOfQuestion = currentTest.Questions.Count(),
                 QuestionIndex = questionIndex,
+                TimeOfTestStart = currentTestSession.StartTime,
+                SecondsLeft = currentTest.TimeLimitInMinutes * 60,
+                HasTimer = currentTest.TimeLimitInMinutes < 0,
 
                 QuestionFormVM = new QuestionFormVM()
                 {

@@ -39,7 +39,7 @@
                             id="@("btnSaveQuestionTxt" + Model.QuestionId)" class="orcaBtn btnWidth120 TopMargin20">
                         <span class="fa fa-save rightMargin5"></span>
                         Save
-                    </button>*@
+                </button>*@
             </div>
 
             <div id="previewQuestionTextDiv" onclick="ShowEditQuestionText(@Model.QuestionId)" data-toggle="tooltip" title="Edit" class="orcaTool-tooltip">
@@ -48,7 +48,7 @@
 
             @*<div onclick="HidePreviewQUestionTextDiv(@Model.QuestionId)">
                 </div>*@
-            <input type="submit" value="Save" class="fa fa-save rightMargin5 orcaBtn TopMargin20 onTheLine btnWidth120" />
+            <button type="submit" value="Save" class="rightMargin5 orcaBtn TopMargin20 onTheLine btnWidth120"><span class="fa fa-save"></span> Save</button>
         </form>
 
 
@@ -107,8 +107,10 @@
                 </div>
             </div>
         }
+        <a asp-controller="Admin" asp-action="ManageTestQuestions" asp-route-TestId="@Model.TestId"><button class="orcaBtn rightMargin10 btnWidth120" style="float:left" ><span class="fa fa-chevron-left"></span> Back</button></a>
+
         <form asp-controller="Admin" asp-action="CreateEmptyAnswer" asp-route-testId="@Model.TestId" asp-route-questionId="@Model.QuestionId">
-            <input type="submit" class="orcaBtn rightMargin10 btnWidth120 BottomMargin20 bgGreen fa fa-plus" value="Answer" />
+            <button type="submit" class="orcaBtn rightMargin10 btnWidth120 BottomMargin20 bgGreen" value="Answer"><span class="fa fa-plus"> Answer</span></button>
         </form>
     </div>
 }
