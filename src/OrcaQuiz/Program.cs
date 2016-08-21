@@ -11,6 +11,7 @@ namespace OrcaQuiz
     {
         public static void Main(string[] args)
         {
+            // Test
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
